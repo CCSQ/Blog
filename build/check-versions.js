@@ -1,7 +1,8 @@
-var chalk = require('chalk')
-var semver = require('semver')
+var chalk = require('chalk')	// 控制台颜色
+var semver = require('semver')	// 版本检测工具
 var packageConfig = require('../package.json')
-var shell = require('shelljs')
+var shell = require('shelljs')	// shell命令包，可跨平台使用
+// 执行cmd命令
 function exec (cmd) {
   return require('child_process').execSync(cmd).toString().trim()
 }
@@ -13,7 +14,7 @@ var versionRequirements = [
     versionRequirement: packageConfig.engines.node
   }
 ]
-
+// 判断是否支持npm命令
 if (shell.which('npm')) {
   versionRequirements.push({
     name: 'npm',

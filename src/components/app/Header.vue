@@ -14,9 +14,20 @@
 			</template>
 		</Menu>
 
+		<!-- 小屏处理 -->
 		<transition name="slide-fade" v-if="isXs">
 			<Menu class="xs-menu" v-show="menuShow" theme="dark" width="100%">
-				<MenuItem name="12312312"><Icon type="ios-paper"></Icon></MenuItem>
+				<MenuGroup title="内容管理">
+					<Submenu name="1">
+						<template slot="title">
+							<Icon type="ios-paper"></Icon>
+							内容管理
+						</template>
+						<MenuItem name="1-1">文章管理</MenuItem>
+						<MenuItem name="1-2">评论管理</MenuItem>
+						<MenuItem name="1-3">举报管理</MenuItem>
+					</Submenu>
+				</MenuGroup>
 			</Menu>
 		</transition>
 	</div>
@@ -72,7 +83,7 @@
 		transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 	}
 	.slide-fade-enter, .slide-fade-leave-to {
-		transform: translateX(-10px);
+		transform: translateY(-10px);
 		opacity: 0;
 	}
 

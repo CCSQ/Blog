@@ -4,12 +4,13 @@ var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
 
+// 拼接成绝对路径
 function resolve (dir) {
 	return path.join(__dirname, '..', dir)
 }
 
 module.exports = {
-	entry: {
+	entry: {  // 入口
 		app: './src/main.js'
 	},
 	output: {
