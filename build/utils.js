@@ -20,6 +20,7 @@ exports.cssLoaders = function (options) {
     }
   }
 
+  // 加载各种css预处理
   // generate loader string to be used with extract text plugin
   function generateLoaders (loader, loaderOptions) {
     var loaders = [cssLoader]
@@ -56,6 +57,7 @@ exports.cssLoaders = function (options) {
   }
 }
 
+// 对大多数css预处理进行了配置，具体配置在cssLoaders方法中
 // Generate loaders for standalone style files (outside of .vue)
 exports.styleLoaders = function (options) {
   var output = []

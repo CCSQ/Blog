@@ -46,8 +46,8 @@ module.exports = {
 			//   test: /\.css$/,
 			//   loader: 'style-loader!css-loader'
 			// },
-			// 加载less文件
-			{test: /\.less$/, loader: 'style!css!less'},
+			// 加载less文件，build/utils.js已经对其进行处理，无需再进行操作
+			// {test: /\.less$/, loader: 'style-loader!css-loader!less-loader'},
 
 			{
 				test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
