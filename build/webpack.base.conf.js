@@ -46,6 +46,9 @@ module.exports = {
 			//   test: /\.css$/,
 			//   loader: 'style-loader!css-loader'
 			// },
+			// 加载less文件
+			{test: /\.less$/, loader: 'style!css!less'},
+
 			{
 				test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
 				loader: 'url-loader',

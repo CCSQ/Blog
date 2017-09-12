@@ -1,6 +1,6 @@
 <template>
 	<div id="leftNav">
-		<Menu theme="dark" active-name="1" accordion v-if="childNavList.length > 0" width="180px">
+		<Menu theme="light" active-name="1" accordion v-if="childNavList.length > 0" width="180px">
 			<template v-for="(item, index) in childNavList">
 				<MenuItem :key="item.id" :name="index" v-if="item.child.length === 0">
 					<router-link :to="item.url"><Icon :type="item.icon"></Icon>{{ item.name }}</router-link>

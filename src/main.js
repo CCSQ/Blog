@@ -6,7 +6,7 @@ import utils from './utils/utils'
 import router from './router'
 
 import 'iview/dist/styles/iview.css'
-import './assets/css/default.css'
+import './assets/css/default.less'
 
 import iView from 'iview'
 

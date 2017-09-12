@@ -1,6 +1,6 @@
 <template>
 	<div id="foot">
-		<div id="block" class="ivu-menu-dark" v-if="!isXs"></div>
+		<div id="block" class="ivu-menu-light" v-if="!isXs"></div>
 	</div>
 </template>
 

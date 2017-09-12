@@ -1,21 +1,24 @@
 <template>
 	<div id="header">
-		<Menu mode="horizontal" theme="dark" active-name="default" @on-select="selectMenu">
-			<template v-if="!isXs">
-				<MenuItem name="default"><Icon type="ios-paper"></Icon>站点主页</MenuItem>
+		<Menu mode="horizontal" theme="light" active-name="default" @on-select="selectMenu">
+			<!-- <template v-if="!isXs"> -->
+			<template>
+				<MenuItem name="default">
+					<Icon type="ios-paper"></Icon>站点主页
+				</MenuItem>
 				<MenuItem v-for="(item, index) in navList" :key="item.id" :name="index">
 					<router-link :to="item.url"><Icon :type="item.icon"></Icon>{{ item.name }}</router-link>
 				</MenuItem>
 			</template>
 
 			<!-- 小屏操作 -->
-			<template v-if="isXs">
+			<!-- <template v-if="isXs">
 				<MenuItem name="openMenu"><Icon type="close-round" id="closeButton" :class="{ active: menuShow, close: !menuShow }"></Icon></MenuItem>
-			</template>
+			</template> -->
 		</Menu>
 
 		<!-- 小屏处理 -->
-		<transition name="slide-fade" v-if="isXs">
+		<!-- <transition name="slide-fade" v-if="isXs">
 			<Menu class="xs-menu" v-show="menuShow" theme="dark" width="100%">
 				<MenuGroup title="内容管理">
 					<Submenu name="1">
@@ -29,7 +32,7 @@
 					</Submenu>
 				</MenuGroup>
 			</Menu>
-		</transition>
+		</transition> -->
 	</div>
 </template>
 

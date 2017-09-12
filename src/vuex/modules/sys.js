@@ -36,6 +36,7 @@ const mutations = {
 
 	[types.SET_NAV_LIST](state, navList) {
 		state.navList = navList
+		state.childNavList = state.navList[0].child
 	},
 
 

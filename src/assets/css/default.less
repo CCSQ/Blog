@@ -1,0 +1,91 @@
+// light主题菜单选中颜色
+@sele-menu-light-color: #00d1b2;
+
+// 定义全局Css
+* {
+	// border: 1px solid red;
+}
+
+html,body {
+	height: 100%;
+	margin: 0px;
+}
+
+
+// 竖排菜单
+.ivu-menu-vertical {
+	height: 100%;
+
+	// 菜单大小
+	.ivu-menu-item, .ivu-menu-submenu-title {
+		height: 25px;
+		padding: 4px 10px;
+		// 菜单鼠标事件
+		&:hover {
+			border-radius: 5px;
+		}
+	}
+
+	.ivu-menu-submenu-title {
+		padding-left: 7px;
+	}
+
+	// 菜单下标位置
+	.ivu-menu-submenu-title-icon {
+		top: 3px;
+	}
+
+	.ivu-menu {
+		border-left: 1px solid #dbdbdb;
+		margin-left: 40px;
+		margin-right: 10px;
+		padding-left: 10px;
+	}
+
+	// 带展开菜单
+	.ivu-menu-submenu {
+		.ivu-menu-item {
+			padding-left: 0px;
+		}
+	}
+}
+
+// 横排菜单
+.ivu-menu-horizontal {
+	height: 50px;
+	line-height: 50px;
+
+}
+
+
+// 字体图标
+.ivu-icon {
+	margin-right: 5px;
+}
+
+
+// 主题
+// 菜单 dark 主题颜色
+.ivu-menu-dark {
+	background: #373d41;
+}
+
+
+// 菜单 light 主题颜色
+.ivu-menu-light {
+	a {
+		color:#4a4a4a;
+	}
+}
+
+// 选中菜单
+.ivu-menu-light.ivu-menu-vertical {
+	.ivu-menu-item-active {
+		&:not(.ivu-menu-submenu) {
+			background: @sele-menu-light-color;
+			border-radius: 2px;
+			border-right: 0px solid #2d8cf0;
+			color: #fff;
+		}
+	}
+}
