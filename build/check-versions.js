@@ -1,8 +1,8 @@
-var chalk = require('chalk')	// ¿ØÖÆÌ¨ÑÕÉ«
-var semver = require('semver')	// °æ±¾¼ì²â¹¤¾ß
+ï»¿var chalk = require('chalk')	// æ§åˆ¶å°é¢œè‰²
+var semver = require('semver')	// ç‰ˆæœ¬æ£€æµ‹å·¥å…·
 var packageConfig = require('../package.json')
-var shell = require('shelljs')	// shellÃüÁî°ü£¬¿É¿çÆ½Ì¨Ê¹ÓÃ
-// Ö´ĞĞcmdÃüÁî
+var shell = require('shelljs')	// shellå‘½ä»¤åŒ…ï¼Œå¯è·¨å¹³å°ä½¿ç”¨
+// æ‰§è¡Œcmdå‘½ä»¤
 function exec (cmd) {
   return require('child_process').execSync(cmd).toString().trim()
 }
@@ -14,7 +14,7 @@ var versionRequirements = [
     versionRequirement: packageConfig.engines.node
   }
 ]
-// ÅĞ¶ÏÊÇ·ñÖ§³ÖnpmÃüÁî
+// åˆ¤æ–­æ˜¯å¦æ”¯æŒnpmå‘½ä»¤
 if (shell.which('npm')) {
   versionRequirements.push({
     name: 'npm',

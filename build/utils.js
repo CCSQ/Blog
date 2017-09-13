@@ -20,7 +20,7 @@ exports.cssLoaders = function (options) {
     }
   }
 
-  // 加载各种css预处理
+  // 加载各种css预处理装载器
   // generate loader string to be used with extract text plugin
   function generateLoaders (loader, loaderOptions) {
     var loaders = [cssLoader]

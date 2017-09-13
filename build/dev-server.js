@@ -1,43 +1,43 @@
-require('./check-versions')()	// ¼ì²â°æ±¾ÊÇ·ñÖ§³Ö
+ï»¿require('./check-versions')()	// æ£€æµ‹ç‰ˆæœ¬æ˜¯å¦æ”¯æŒ
 
-var config = require('../config')	// »ñÈ¡ÅäÖÃÎÄ¼þ
-// ÉèÖÃ»·¾³ÉÏÏÂÎÄÎª¿ª·¢»·¾³
+var config = require('../config')	// èŽ·å–é…ç½®æ–‡ä»¶
+// è®¾ç½®çŽ¯å¢ƒä¸Šä¸‹æ–‡ä¸ºå¼€å‘çŽ¯å¢ƒ
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
 }
 
-var opn = require('opn')	// ´ò¿ªÍøÖ·»òÕßÊÇÎÄ¼þÖ®ÀàµÄ¹¤¾ß
+var opn = require('opn')	// æ‰“å¼€ç½‘å€æˆ–è€…æ˜¯æ–‡ä»¶ä¹‹ç±»çš„å·¥å…·
 var path = require('path')
 var express = require('express')
 var webpack = require('webpack')
-var proxyMiddleware = require('http-proxy-middleware')	// ´úÀíÖÐ¼ä¼þ
+var proxyMiddleware = require('http-proxy-middleware')	// ä»£ç†ä¸­é—´ä»¶
 var webpackConfig = require('./webpack.dev.conf')
 
 // default port where dev server listens for incoming traffic
-var port = process.env.PORT || config.dev.port	// ÉèÖÃ¶Ë¿ÚºÅ
+var port = process.env.PORT || config.dev.port	// è®¾ç½®ç«¯å£å·
 // automatically open browser, if not set will be false
-var autoOpenBrowser = !!config.dev.autoOpenBrowser	// ÊÇ·ñ×Ô¶¯¿ªÆôä¯ÀÀÆ÷
+var autoOpenBrowser = !!config.dev.autoOpenBrowser	// æ˜¯å¦è‡ªåŠ¨å¼€å¯æµè§ˆå™¨
 // Define HTTP proxies to your custom API backend
 // https://github.com/chimurai/http-proxy-middleware
-// ¶¨Òå´úÀí·þÎñÆ÷µ½ºóÌ¨api
+// å®šä¹‰ä»£ç†æœåŠ¡å™¨åˆ°åŽå°api
 var proxyTable = config.dev.proxyTable
 
 var app = express()
 var compiler = webpack(webpackConfig)
 
-// ¾²Ì¬×ÊÔ´·þÎñÆ÷£¬Ö»ÓÃÓÚ¿ª·¢»·¾³£¬ÓÃÓÚÈÈ¸üÐÂ£¬ÔÚ´Ë¶¨ÒåÁËÕû¸öÏîÄ¿µÄÈë¿Ú
+// é™æ€èµ„æºæœåŠ¡å™¨ï¼Œåªç”¨äºŽå¼€å‘çŽ¯å¢ƒï¼Œç”¨äºŽçƒ­æ›´æ–°ï¼Œåœ¨æ­¤å®šä¹‰äº†æ•´ä¸ªé¡¹ç›®çš„å…¥å£
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
   publicPath: webpackConfig.output.publicPath,
   quiet: true
 })
 
-// ÊµÏÖä¯ÀÀÆ÷µÄÎÞË¢ÐÂ¸üÐÂ£¨hot reload£©
+// å®žçŽ°æµè§ˆå™¨çš„æ— åˆ·æ–°æ›´æ–°ï¼ˆhot reloadï¼‰
 var hotMiddleware = require('webpack-hot-middleware')(compiler, {
   log: false,
   heartbeat: 2000
 })
 // force page reload when html-webpack-plugin template changes
-// µ± html-webpack-plugin Ä£°å¸ü¸ÄÊ±Ç¿ÖÆÒ³ÃæÖØÐÂ¼ÓÔØ
+// å½“ html-webpack-plugin æ¨¡æ¿æ›´æ”¹æ—¶å¼ºåˆ¶é¡µé¢é‡æ–°åŠ è½½
 compiler.plugin('compilation', function (compilation) {
   compilation.plugin('html-webpack-plugin-after-emit', function (data, cb) {
     hotMiddleware.publish({ action: 'reload' })
@@ -45,17 +45,17 @@ compiler.plugin('compilation', function (compilation) {
   })
 })
 
-// proxy api requests ÖÐ¼ä¼þ´úÀí
+// proxy api requests ä¸­é—´ä»¶ä»£ç†
 Object.keys(proxyTable).forEach(function (context) {
   var options = proxyTable[context]
   if (typeof options === 'string') {
     options = { target: options }
   }
-							// ÇëÇó						Ä¿±êÖ÷»ú
+							// è¯·æ±‚						ç›®æ ‡ä¸»æœº
   app.use(proxyMiddleware(options.filter || context, options))
 })
 
-// historyÄ£Ê½ £¬ ËùÓÐÂ·¾¶¶¼»á·µ»Ø index.html ÎÄ¼þ
+// historyæ¨¡å¼ ï¼Œ æ‰€æœ‰è·¯å¾„éƒ½ä¼šè¿”å›ž index.html æ–‡ä»¶
 // handle fallback for HTML5 history API
 app.use(require('connect-history-api-fallback')())
 
@@ -66,7 +66,7 @@ app.use(devMiddleware)
 // compilation error display
 app.use(hotMiddleware)
 
-// ÉèÖÃ·þÎñ¶Ë¾²Ì¬ÎÄ¼þ¼Ð  ./static
+// è®¾ç½®æœåŠ¡ç«¯é™æ€æ–‡ä»¶å¤¹  ./static
 // serve pure static assets
 var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
 app.use(staticPath, express.static('./static'))
@@ -74,13 +74,13 @@ app.use(staticPath, express.static('./static'))
 var uri = 'http://localhost:' + port
 
 var _resolve
-// ÐÂ½¨´úÀí¶ÔÏó£¬ÓÃÓÚ´¦ÀíÒì²½ÇëÇó£¬µ±Òì²½Íê³Éºó£¬·µ»ØÒ»¸ö×´Ì¬ÓÉ¸ø¶¨value¾ö¶¨µÄPromise¶ÔÏó
+// æ–°å»ºä»£ç†å¯¹è±¡ï¼Œç”¨äºŽå¤„ç†å¼‚æ­¥è¯·æ±‚ï¼Œå½“å¼‚æ­¥å®ŒæˆåŽï¼Œè¿”å›žä¸€ä¸ªçŠ¶æ€ç”±ç»™å®švalueå†³å®šçš„Promiseå¯¹è±¡
 var readyPromise = new Promise(resolve => {
   _resolve = resolve
 })
 
 console.log('> Starting dev server...')
-// devMiddlewareÆô¶¯Íêºó´¥·¢µÄÂß¼­
+// devMiddlewareå¯åŠ¨å®ŒåŽè§¦å‘çš„é€»è¾‘
 devMiddleware.waitUntilValid(() => {
   console.log('> Listening at ' + uri + '\n')
   // when env is testing, don't need open it

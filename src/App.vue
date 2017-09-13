@@ -7,6 +7,7 @@
 			<div>nihao</div>
 		</div> -->
 		<foot></foot>
+		<music></music>
 	</div>
 </template>
 
@@ -14,12 +15,13 @@
 import HeaderNav from '@/components/app/Header'
 import LeftNav from '@/components/app/LeftNav'
 import Foot from '@/components/app/Foot'
+import Music from '@/components/app/Music'
 import store from '@/vuex/store'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
 	name: 'app',
-	components: { HeaderNav, LeftNav, Foot },
+	components: { HeaderNav, LeftNav, Foot, Music },
 	store,
 
 	data() {
@@ -59,10 +61,17 @@ export default {
 		display: inline-block;
 		height: 90%;
 	}
+
 	#foot {
 		bottom: 0px;
 		width: 100%;
 		height: 10%;
+		position: fixed;
+	}
+
+	#music {
+		right: 10px;
+		bottom: 10px;
 		position: fixed;
 	}
 </style>

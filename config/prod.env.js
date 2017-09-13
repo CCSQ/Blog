@@ -1,5 +1,5 @@
 module.exports = {
   NODE_ENV: '"production"',
-  api: '"http://127.0.0.1:3000/"',
+  api: '"http://localhost:8080/"',
   xs: '"768"'
 }

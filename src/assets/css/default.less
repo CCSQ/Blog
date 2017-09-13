@@ -54,8 +54,28 @@ html,body {
 .ivu-menu-horizontal {
 	height: 50px;
 	line-height: 50px;
-
+	.ivu-menu-item:first-child {
+		width: 180px;
+		padding: 0;
+		text-align: center;
+		font-size: 18px;
+	}
 }
+
+// 卡片
+.ivu-card {
+	// 卡片右上角
+	.ivu-card-extra {
+		right: 10px;
+		top: 10px;
+	}
+	
+	// 卡片主体
+	.ivu-card-body {
+		padding: 0px;
+	}
+}
+
 
 
 // 字体图标
@@ -63,6 +83,16 @@ html,body {
 	margin-right: 5px;
 }
 
+
+// 未关联主体
+.ivu-progress-bg {
+	background-color: @sele-menu-light-color;
+}
+.ivu-icon {
+	&:hover {
+		color: @sele-menu-light-color;
+	}
+}
 
 // 主题
 // 菜单 dark 主题颜色
@@ -76,9 +106,10 @@ html,body {
 	a {
 		color:#4a4a4a;
 	}
+	// border-right: 1px solid;
 }
 
-// 选中菜单
+// 竖排选中菜单
 .ivu-menu-light.ivu-menu-vertical {
 	.ivu-menu-item-active {
 		&:not(.ivu-menu-submenu) {
@@ -86,6 +117,23 @@ html,body {
 			border-radius: 2px;
 			border-right: 0px solid #2d8cf0;
 			color: #fff;
+		}
+	}
+}
+
+// 横排选中菜单
+.ivu-menu-light.ivu-menu-horizontal {
+	.ivu-menu-item-active {
+		color: @sele-menu-light-color;
+		border-bottom: 1px solid @sele-menu-light-color;
+		&:hover {
+			color: @sele-menu-light-color;
+		}
+	}
+
+	.ivu-menu-item {
+		&:hover {
+			border-bottom: 1px solid @sele-menu-light-color;
 		}
 	}
 }

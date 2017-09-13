@@ -9,6 +9,7 @@ const state = {
 	navList: [],	// 导航列表
 	childNavList: [],
 	screenWidth: 768,
+	musicList: []
 
 }
 

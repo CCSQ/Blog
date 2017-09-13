@@ -17,6 +17,10 @@ export function getIsXs(state) {
 	return state.sys.screenWidth < process.env.xs
 }
 
+export function getMusicList(state) {
+	return state.sys.musicList
+}
+
 // export function getShowLoading(state) {
 // 	return state.public.showLoading
 // }
