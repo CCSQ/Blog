@@ -57,6 +57,7 @@ module.exports = {
 					name: utils.assetsPath('img/[name].[hash:7].[ext]')
 				}
 			},
+			// 加载多媒体文件，对低于 10000 字节的 mp3 文件使用 url-loader 加载器，而对等于或超过 10000 字节的 mp3 文件使用 file-loader 加载器
 			{
 				test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
 				loader: 'url-loader',

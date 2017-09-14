@@ -7,12 +7,13 @@ export default{
 
 		// 音频相关类
 		Vue.prototype.audio_visualizer = function () {
-			this.file = null	// 播放的文件
+			// this.file = null	// 播放的文件
 			this.fileName = null	// 文件名
 			this.audioContext = null	// 播放上下文
 			this.animationId = null	// 动画id
 			this.pro = 0	// 进度 max：100
 			this.status = 0	// 状态值，0 停止，1 加载，2 暂停，3 开始
+			this.buffer = null
 		}
 
 		Vue.prototype.audio_visualizer.prototype = {
@@ -23,11 +24,12 @@ export default{
 
 			// 设置播放文件
 			setFile: function (file) {
-				this.file = file
+				// this.file = file
+				// let nameArr = file.name.split('.')
+				// nameArr.pop()
+				// this.fileName = nameArr.join('.')
 
-				let nameArr = file.name.split('.')
-				nameArr.pop()
-				this.fileName = nameArr.join('.')
+				this.buffer = file
 
 				this._start()
 			},
@@ -40,32 +42,39 @@ export default{
 				try {
 					this.audioContext = new AudioContext()
 				} catch (e) {
-					console.log(e)
+					console.error(e)
 				}
 			},
 
 			// 开始处理音频
 			_start: function () {
 				// 异步读取文件
-				let fr = new FileReader()
+				// let fr = new FileReader()
 				this.status = 1
 
-				fr.onload = (e) => {
-					if (!this.audioContext) return
-					let fileResult = e.target.result;
+				if (!this.audioContext) return
+				this.audioContext.decodeAudioData(this.buffer, (buffer) => {
+					this._visualize(buffer)
+				}, (e) => {
+					console.error(e)
+				})
+
+				// fr.onload = (e) => {
+					// if (!this.audioContext) return
+					// let fileResult = e.target.result;
 					// 从ArrayBuffer对象中异步解码音频文件. 该方法只能作用于完整的音频文件.
-					this.audioContext.decodeAudioData(fileResult, (buffer) => {
-						this._visualize(buffer)
-					}, (e) => {
-						console.log(e)
-					})
-				}
+					// this.audioContext.decodeAudioData(this.buffer, (buffer) => {
+					// 	this._visualize(buffer)
+					// }, (e) => {
+					// 	console.error(e)
+					// })
+				// }
 
-				fr.onerror = (e) => {
-					console.log(e)
-				}
+				// fr.onerror = (e) => {
+				// 	console.log(e)
+				// }
 
-				fr.readAsArrayBuffer(this.file)
+				// fr.readAsArrayBuffer(this.file)
 			},
 
 			// 音频播放
@@ -85,7 +94,7 @@ export default{
 
 				// 播放
 				this.status = 3
-				audioBufferSouceNode.start(0)
+				audioBufferSouceNode.start(0)	// 开始播放(播放延迟，歌曲进度，播多久)
 				
 				// 结束事件
 				audioBufferSouceNode.onended = () => {
@@ -94,16 +103,17 @@ export default{
 				}
 
 				// 可视化操作
-				this._drawSpectrum(analyser)
+				this._drawSpectrum(analyser,audioBufferSouceNode)
 			},
 
-			_drawSpectrum: function (analyser) {
+			_drawSpectrum: function (analyser,audioBufferSouceNode) {
 				// 1024位处理
 				var draw = () => {
 					let array = new Uint8Array(analyser.frequencyBinCount)
 					analyser.getByteFrequencyData(array)	// 将当前频域数据拷贝进Uint8Array数组（无符号字节数组）。
 					// analyser.context.currentTime	// audioContext一开始运行的计时器
-					console.log(analyser.context.currentTime)
+					// console.log(audioBufferSouceNode.context.currentTime)
+					// console.log(this.audioContext.getOutputTimestamp())
 					this.animationId = requestAnimationFrame(draw)
 				}
 				this.animationId = requestAnimationFrame(draw)

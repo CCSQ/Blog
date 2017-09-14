@@ -1,6 +1,5 @@
 <template>
 	<div id="music">
-	<input type="file" id="uploadedFile"></input>
 		<div id="max-card" v-if="isMax">
 			<Card>
 				<div @click="isMax = !isMax" slot="extra"><Icon class="menu-top" type="arrow-shrink"></Icon></div>
@@ -19,7 +18,8 @@
 
 				<div class="menu-control">
 					<Icon type="ios-arrow-back"></Icon>
-					<Icon type="pause"></Icon>
+					<a href="#" @click="pause"><Icon :type="audio.status === 0 ? 'stop' : audio.status === 1 ? 'pause' : pauseIco" @click="pause()"></Icon></a>
+					
 					<Icon type="ios-arrow-forward"></Icon>
 				</div>
 
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+	import api from '@/api'
 	import audio_visualizer from '@/utils/utils'
 	import { mapGetters, mapActions } from 'vuex'
 	export default {
@@ -39,6 +40,7 @@
 					img: '',
 					url: '../../assets/music/demo.mp3'
 				},
+				pauseIco: 'pause',
 				isMax: false,
 				audio: new this.audio_visualizer(),
 
@@ -46,7 +48,26 @@
 		},
 
 		methods: {
-			
+			pause: function (event) {
+				if (this.audio.audioContext.state === 'running') {
+					this.audio.audioContext.suspend().then(() => {
+						this.pauseIco = 'play'
+					})
+				} else if (this.audio.audioContext.state === 'suspended') {
+					this.audio.audioContext.resume().then(() => {
+						this.pauseIco = 'pause'
+					})
+				}
+			},
+			getMusic: function (url) {
+				api.getByXMLHttpRequest('http://localhost:8088/static/media/demo.65b341f.mp3', {
+					responseType:'arraybuffer'
+				}, (xhr) => {
+					if (xhr != null && xhr.statusText == 'OK') {
+						this.audio.setFile(xhr.response)
+					}
+				})
+			}
 		},
 
 		computed: mapGetters({
@@ -54,16 +75,16 @@
 		}),
 
 		mounted: function() {
-			// this.resource(API_ROOT + url)
 			this.audio.init()
-
-			var audioInput = document.getElementById('uploadedFile')
-			audioInput.onchange = () => {
-				if (audioInput.files.length !== 0) {
-					this.audio.setFile(audioInput.files[0])
-				}
-			}
+			this.getMusic()
 		},
+
+		watch: {
+			audio: function () {
+				console.log(111)
+				// console.log(new)
+			}
+		}
 
 	}
 </script>

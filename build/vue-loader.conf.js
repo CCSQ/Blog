@@ -9,10 +9,12 @@ module.exports = {
       : config.dev.cssSourceMap,
     extract: isProduction
   }),
+  // 一下内容将转换为模块
   transformToRequire: {
     video: 'src',
     source: 'src',
     img: 'src',
-    image: 'xlink:href'
+    image: 'xlink:href',
+    audio: 'src'
   }
 }

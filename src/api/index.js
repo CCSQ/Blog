@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueResource from 'vue-resource'	// 发送http请求
+var xhr = new XMLHttpRequest()	// XMLHttpRequest 对象请求
 // import cookies from 'js-cookie'
 // import store from '../vuex/store'
 
@@ -26,7 +27,7 @@ Vue.http.interceptors.push((request, next) => {
 		} else if (response.status === 200) {
 			// 获取数据失败逻辑
 			if (!response.body.success) {
-				console.log("获取数据失败")
+				// console.log("获取数据失败")
 			}
 		}
 	})
@@ -46,6 +47,28 @@ export default {
 // 	getPrivateInfor(opts) {
 // 		return this.post("private/getPrivateInfor",opts)
 // 	},
+
+	// 通过XMLHttpRequest对象获取url信息, 解构赋值，param默认为空
+	getByXMLHttpRequest(
+		url, 
+		{
+			param = {},
+			responseType = '',	// 响应类型
+		},
+		onload = (xhr = null) => {}
+	) {
+		xhr.open('GET', url, true)
+		xhr.responseType = responseType
+		xhr.onload = () => {
+			onload(xhr)
+		}
+		xhr.send();
+	},
+
+	
+	getOtherUrl(url, { param = {}, options = {} }) {
+		return Vue.resource(url).get(param, options)
+	},
 
 	// 通用get方法
 	get(url, param = {}) {
