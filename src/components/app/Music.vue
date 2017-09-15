@@ -3,8 +3,27 @@
 		<div id="max-card" v-if="isMax">
 			<Card>
 				<div @click="isMax = !isMax" slot="extra"><Icon class="menu-top" type="arrow-shrink"></Icon></div>
+				<div class="list">
+					<Button type="ghost" :icon="musicListIsShow ? 'ios-arrow-left' : 'ios-arrow-right'" @click="showMusicList"></Button>
+					<div class="music-list">
+						
+					</div>
+				</div>
+
+				<!-- <div class="infor">
+					<p class="title">{{audio.status === 1 ? '加载中' : audio.fileName || '无文件'}}</p>
+					<p class="time">{{audio.currTime | formatTime}}/{{audio.duration | formatTime}}</p>
+				</div>
+
+				<div class="menu-control">
+					<a href="#" @click="pre"><Icon type="ios-arrow-back"></Icon></a>
+					<a href="#" @click="audio.pause()"><Icon :type="audio.status === 3 ? 'pause' : 'play'"></Icon></a>
+					<a href="#" @click="next"><Icon type="ios-arrow-forward"></Icon></a>
+				</div> -->
 				
-				<Progress class="music-pro" :percent="45" :hide-info="true" status="active" :stroke-width="2"></Progress>
+				<Progress class="music-pro" :percent="Number.parseInt(audio.currTime / audio.duration * 100)" :hide-info="true" status="active" :stroke-width="2"></Progress>
+
+				<!-- <Spin size="large" fix v-if="audio.status === 1 || audio.status === 0"></Spin> -->
 			</Card>
 		</div>
 
@@ -13,60 +32,60 @@
 				<div @click="isMax = !isMax" slot="extra"><Icon class="menu-top" type="arrow-expand"></Icon></div>
 
 				<div class="infor">
-					<p class="title">{{audio.fileName || '无文件'}}</p>
+					<p class="title">{{audio.status === 1 ? '加载中' : audio.fileName || '未知'}}</p>
+					<p class="time">{{audio.currTime | formatTime}}/{{audio.duration | formatTime}}</p>
 				</div>
 
 				<div class="menu-control">
-					<Icon type="ios-arrow-back"></Icon>
-					<a href="#" @click="pause"><Icon :type="audio.status === 0 ? 'stop' : audio.status === 1 ? 'pause' : pauseIco" @click="pause()"></Icon></a>
-					
-					<Icon type="ios-arrow-forward"></Icon>
+					<a href="#" @click="pre"><Icon type="ios-arrow-back"></Icon></a>
+					<a href="#" @click="audio.pause()"><Icon :type="audio.status === 3 ? 'pause' : 'play'"></Icon></a>
+					<a href="#" @click="next"><Icon type="ios-arrow-forward"></Icon></a>
 				</div>
 
-				<Progress class="music-pro" :percent="audio.pro" :hide-info="true" status="active" :stroke-width="1"></Progress>
+				<Progress class="music-pro" :percent="Number.parseInt(audio.currTime / audio.duration * 100)" :hide-info="true" status="active" :stroke-width="1"></Progress>
+
+				<Spin size="large" fix v-if="audio.status === 1 || audio.status === 0"></Spin>
 			</Card>
 		</div>
 	</div>
 </template>
 
 <script>
-	import api from '@/api'
 	import audio_visualizer from '@/utils/utils'
 	import { mapGetters, mapActions } from 'vuex'
 	export default {
 		data(){
 			return {
-				musicInfor: {
-					img: '',
-					url: '../../assets/music/demo.mp3'
-				},
 				pauseIco: 'pause',
-				isMax: false,
+				isMax: true,
 				audio: new this.audio_visualizer(),
-
+				musicBuffer: {},
+				playIndex: 0,
+				musicListIsShow: true
 			}
 		},
 
 		methods: {
-			pause: function (event) {
-				if (this.audio.audioContext.state === 'running') {
-					this.audio.audioContext.suspend().then(() => {
-						this.pauseIco = 'play'
-					})
-				} else if (this.audio.audioContext.state === 'suspended') {
-					this.audio.audioContext.resume().then(() => {
-						this.pauseIco = 'pause'
-					})
+			pre: function () {
+				if (this.playIndex == 0) {
+					this.audio.play(this.musicList[this.musicList.length - 1])
+					this.playIndex = this.musicList.length - 1
+				} else {
+					this.audio.play(this.musicList[-- this.playIndex])
 				}
 			},
-			getMusic: function (url) {
-				api.getByXMLHttpRequest('http://localhost:8088/static/media/demo.65b341f.mp3', {
-					responseType:'arraybuffer'
-				}, (xhr) => {
-					if (xhr != null && xhr.statusText == 'OK') {
-						this.audio.setFile(xhr.response)
-					}
-				})
+
+			next: function () {
+				if (this.playIndex == this.musicList.length - 1) {
+					this.audio.play(this.musicList[0])
+					this.playIndex = 0
+				} else {
+					this.audio.play(this.musicList[++ this.playIndex])
+				}
+			},
+
+			showMusicList: function () {
+				this.musicListIsShow = !this.musicListIsShow
 			}
 		},
 
@@ -76,16 +95,28 @@
 
 		mounted: function() {
 			this.audio.init()
-			this.getMusic()
+			if (this.musicList.length > 0) this.audio.play(this.musicList[0])
+		},
+
+		filters: {
+			formatTime: function (value) {
+				let min = Number.parseInt(value / 60)
+				let s = Number.parseInt(value - min * 60).toString()
+				return min.toString() + ':' + (s.length > 1 ? s : '0' + s)
+			}
 		},
 
 		watch: {
-			audio: function () {
-				console.log(111)
-				// console.log(new)
+			audio: {
+				handler (curVal,oldVal) {
+					if (curVal.isEnd) {
+						this.next()
+						this.audio.isEnd = false
+					}
+				},
+				deep:true
 			}
 		}
-
 	}
 </script>
 
@@ -106,6 +137,8 @@
 				}
 				.menu-top {
 					cursor: pointer;
+					right: 5px;
+					top: 1px;
 					display: none;
 				}
 				.music-pro {
@@ -116,13 +149,16 @@
 				}
 				.infor {
 					height: 60px;
-					padding-top: 20px;
+					padding-top: 15px;
 					text-align: center;
 					overflow:hidden;
+					p {
+						line-height: 20px;
+					}
 					.title{
 						margin-left: 10px;
 						width: 80px;
-						line-height: 12px;
+						
 						font-size: 5px;
 
 						overflow: hidden;
@@ -138,6 +174,9 @@
 						// &:hover{
 						// 	font-size: 20px;
 						// }
+					}
+					a {
+						color: #5c6b77;
 					}
 				}
 			}
@@ -156,6 +195,20 @@
 				.menu-top {
 					cursor: pointer;
 					display: none;
+				}
+				.list {
+					width: 100px;
+					height: @max-music-width-height - 4;
+					border: 1px solid;
+					.ivu-btn {
+						width: 20px;
+						height: 20px;
+						padding: 1px 5px;
+						position: absolute;
+						top: 0px;
+						left: 100px;
+						border-radius: 0;
+					}
 				}
 				.music-pro {
 					height: 2px;

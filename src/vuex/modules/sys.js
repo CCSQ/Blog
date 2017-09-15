@@ -9,7 +9,7 @@ const state = {
 	navList: [],	// 导航列表
 	childNavList: [],
 	screenWidth: 768,
-	musicList: []
+	musicList: [{id:1,url:'http://localhost:8088/static/media/demo.65b341f.mp3',name:'demo'}]
 
 }
 
