@@ -18,12 +18,13 @@ export default{
 			this.status = 0	// 状态值，0 停止，1 加载，2 暂停，3 开始
 			this.isEnd = false
 			this.buffer = null	// 歌曲文件
-			this.gainValue = 0.5	// 音量
+			this.gainValue = 50	// 音量
 			this.slowlyTime = 10	// 渐强时间
 			this.startTimer = null	// 计时器
 			this.audioBufferSouceNode = null
 			this.musicBuffer = {}	// 缓存
 			this.playId = 0	// 当前播放id
+			this.gainNode = null	// 音量相关
 		}
 
 		Vue.prototype.audio_visualizer.prototype = {
@@ -50,11 +51,11 @@ export default{
 				})
 			},
 
-			stopAsync: function () {
-				return new Promise((resolve, reject) => {
-					
-					resolve()
-				})
+			changVol: function (val) {
+				this.gainValue = val
+				// if (this.gainNode) this.gainNode.gain.value = this.gainValue / 100
+				console.log(val/100,this.gainNode.gain.value)
+				this.gainNode.gain.value = val / 100
 			},
 
 			// 设置播放文件
@@ -148,10 +149,11 @@ export default{
 				audioBufferSouceNode.connect(gainNode)
 				gainNode.connect(analyser)	// 连接频率解析器
 				analyser.connect(this.audioContext.destination)	//当前audio context中所有节点的最终节点，一般表示音频渲染设备。
+
 				audioBufferSouceNode.buffer = buffer 	// 连接资源
 
 				// 初始化音量为一半
-				gainNode.gain.value = this.gainValue
+				gainNode.gain.value = this.gainValue / 100
 				// 音频开始渐强结束渐弱
 				gainNode.gain.linearRampToValueAtTime(0, currTime)
 				gainNode.gain.linearRampToValueAtTime(gainNode.gain.value, currTime + this.slowlyTime)
@@ -184,6 +186,7 @@ export default{
 					console.log("播放结束")
 				}
 
+				this.gainNode = gainNode
 				this.audioBufferSouceNode = audioBufferSouceNode
 
 				// 可视化操作
