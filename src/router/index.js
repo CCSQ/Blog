@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import Index from '@/components/Index'
+import systemErr from '@/components/sys/systemErr'
 
 Vue.use(Router)
 
 export default new Router({
 	routes: [
-		// { path: '/url', name: 'Index', component: Index },
+		{ path: '/systemErr/:type', name: 'systemErr', component: systemErr },
 		// { path: '/', name: 'Index', component: Index },
 	]
 })

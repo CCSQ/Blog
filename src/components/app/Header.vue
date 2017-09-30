@@ -4,10 +4,10 @@
 			<!-- <template v-if="!isXs"> -->
 			<template>
 				<MenuItem name="default">
-					<Icon type="ios-paper"></Icon>站点主页
+					<router-link :to="'/systemErr/404'"><Icon type="ios-paper" class="menu-icon"></Icon>站点主页</router-link>
 				</MenuItem>
 				<MenuItem v-for="(item, index) in navList" :key="item.id" :name="index">
-					<router-link :to="item.url"><Icon :type="item.icon"></Icon>{{ item.name }}</router-link>
+					<router-link :to="item.url"><Icon :type="item.icon" class="menu-icon"></Icon>{{ item.name }}</router-link>
 				</MenuItem>
 			</template>
 
@@ -41,7 +41,7 @@
 	export default {
 		data(){
 			return {
-				menuShow : false,
+				// menuShow : false,
 			}
 		},
 
@@ -72,48 +72,52 @@
 	}
 </script>
 
-<style scoped>
-	.xs-menu {
-		float: left;
-		z-index: 100;
-	}
+<style scoped lang="less">
 
-	/*过渡动效*/
-	.slide-fade-enter-active {
-		transition: all .3s ease;
+	.menu-icon {
+		margin-right: 10px;
 	}
-	.slide-fade-leave-active {
-		transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-	}
-	.slide-fade-enter, .slide-fade-leave-to {
-		transform: translateY(-10px);
-		opacity: 0;
-	}
+	// .xs-menu {
+	// 	float: left;
+	// 	z-index: 100;
+	// }
 
-	#closeButton {
-		font-size: 20px;
-		transform: rotate(45deg);
-	}
+	// /*过渡动效*/
+	// .slide-fade-enter-active {
+	// 	transition: all .3s ease;
+	// }
+	// .slide-fade-leave-active {
+	// 	transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+	// }
+	// .slide-fade-enter, .slide-fade-leave-to {
+	// 	transform: translateY(-10px);
+	// 	opacity: 0;
+	// }
 
-	.active {
-		animation: rotate(45deg) 0.5s;
-		/*-webkit-animation: deg45Rotate 0.5s;*/
-	}
+	// #closeButton {
+	// 	font-size: 20px;
+	// 	transform: rotate(45deg);
+	// }
 
-	.close {
-		/*animation-direction:reverse;
-		animation: deg45Rotate 0.5s;*/
-	}
+	// .active {
+	// 	animation: rotate(45deg) 0.5s;
+	// 	/*-webkit-animation: deg45Rotate 0.5s;*/
+	// }
 
-	@keyframes deg45Rotate
-	{
-		from {transform: rotate(45deg);}
-		to {transform: rotate(90deg);}
-	}
+	// .close {
+	// 	/*animation-direction:reverse;
+	// 	animation: deg45Rotate 0.5s;*/
+	// }
 
-	@-webkit-keyframes deg45Rotate /* Safari 与 Chrome */
-	{
-		from {transform: rotate(45deg);}
-		to {transform: rotate(90deg);}
-	}
+	// @keyframes deg45Rotate
+	// {
+	// 	from {transform: rotate(45deg);}
+	// 	to {transform: rotate(90deg);}
+	// }
+
+	// @-webkit-keyframes deg45Rotate /* Safari 与 Chrome */
+	// {
+	// 	from {transform: rotate(45deg);}
+	// 	to {transform: rotate(90deg);}
+	// }
 </style>

@@ -17,30 +17,14 @@ export function getIsXs(state) {
 	return state.sys.screenWidth < process.env.xs
 }
 
+export function getLeftNavShow(state) {
+	return state.sys.leftNavShow
+}
+
 export function getMusicList(state) {
 	return state.sys.musicList
 }
 
-// export function getShowLoading(state) {
-// 	return state.public.showLoading
-// }
-
-// export function isCanEdit(state) {
-// 	return state.public.isCanEdit
-// }
-
-// export function getInitParam(state) {
-// 	return state.public.initParam
-// }
-
-// // export function getIsLoading(state) {
-// // 	return state.mainList.isLoading
-// // }
-
-// // export function getInforList(state) {
-// // 	return state.mainList.inforList
-// // }
-
-// // export function getType(state) {
-// // 	return state.public.typeName
-// // }
+export function getIsLogin(state) {
+	return state.user.isLogin
+}

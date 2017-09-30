@@ -1,80 +1,139 @@
 <template>
-	<div id="music">
-		<div id="max-card" v-if="isMax">
-			<Card>
-				<div @click="isMax = !isMax" slot="extra"><Icon class="menu-top" type="arrow-shrink"></Icon></div>
-				<div class="list">
+	<div id="music" @mouseenter="topMenuShow = true" @mouseleave="topMenuShow = false">
+
+		<!-- <audio src="../../assets/music/demo.mp3" controls=""></audio> -->
+		<Card class="music-car" >
+			<transition @before-enter="menuBeforeEnter" @enter="menuEnter" @leave="menuLeave">
+				<div class="music-car-menu-list" v-show="topMenuShow">
+					<a href="#" @click="min"><Icon :type="state === 1 ? 'minus' : 'arrow-resize'"></Icon></a>
+					<a href="#" @click="max" v-show="state !== 3"><Icon type="arrow-expand"></Icon></a>
+				</div>
+			</transition>
+
+			<div class="music-car-list" v-show="state === 3">
+				<transition name="music-list">
 					<div class="music-list" v-show="musicListIsShow">
 						<ul>
 							<li v-for="(item, index) in musicList"  @click="audio.play(musicList[index])">{{item.name}}</li>
 						</ul>
 					</div>
-					<Button type="ghost" :icon="musicListIsShow ? 'ios-arrow-left' : 'ios-arrow-right'" @click="showMusicList"></Button>
-				</div>
-				
-				<div class="main-music">
-					<div class="infor">
-						<p class="title">{{audio.status === 1 ? '加载中' : audio.fileName || '无文件'}}</p>
-						<p class="time">{{audio.currTime | formatTime}}/{{audio.duration | formatTime}}</p>
-					</div>
+				</transition>
+				<Button type="ghost" :icon="musicListIsShow ? 'ios-arrow-left' : 'ios-arrow-right'" @click="musicListIsShow = !musicListIsShow"></Button>
+			</div>
 
-					<div class="menu-control">
-						<a href="#" @click="pre"><Icon type="ios-arrow-back"></Icon></a>
-						<a href="#" @click="audio.pause()"><Icon :type="audio.status === 3 ? 'pause' : 'play'"></Icon></a>
-						<a href="#" @click="next"><Icon type="ios-arrow-forward"></Icon></a>
-					</div>
+			<div class="music-car-infor" v-show="state !== 0">
+				<p class="title">{{audio.status === 1 ? '加载中' : audio.fileName || '无文件'}}</p>
+				<p class="time" v-show="state === 3">{{audio.currTime | formatTime}}/{{audio.duration | formatTime}}</p>
+			</div>
 
-					<div class="volume-control">
-						<Slider :value="50" :min="0" :max="100" @input="changVol"></Slider>
-					</div>
-					
-				</div>
+			<div class="music-car-control-list">
+				<a href="javascript;" @click="pre"><Icon type="ios-arrow-back"></Icon></a>
+				<a href="javascript;" @click="audio.pause()"><Icon :type="audio.status === 3 ? 'pause' : 'play'"></Icon></a>
+				<a href="javascript;" @click="next"><Icon type="ios-arrow-forward"></Icon></a>
+			</div>
+		
+			<canvas v-show="state === 3" class="music-car-canvas"></canvas>
+			<!-- <Slider v-show="state === 3" :value="50" :min="0" :max="100" @input="changVol"></Slider> -->
 
-				<Progress class="music-pro" :percent="Number.parseInt(audio.currTime / audio.duration * 100)" :hide-info="true" status="active" :stroke-width="2"></Progress>
-
-				<!-- <Spin size="large" fix v-if="audio.status === 1 || audio.status === 0"></Spin> -->
-			</Card>
-		</div>
-
-		<div id="min-card" v-else>
-			<Card>
-				<div @click="isMax = !isMax" slot="extra"><Icon class="menu-top" type="arrow-expand"></Icon></div>
-
-				<div class="infor">
-					<p class="title">{{audio.status === 1 ? '加载中' : audio.fileName || '未知'}}</p>
-					<p class="time">{{audio.currTime | formatTime}}/{{audio.duration | formatTime}}</p>
-				</div>
-
-				<div class="menu-control">
-					<a href="#" @click="pre"><Icon type="ios-arrow-back"></Icon></a>
-					<a href="#" @click="audio.pause()"><Icon :type="audio.status === 3 ? 'pause' : 'play'"></Icon></a>
-					<a href="#" @click="next"><Icon type="ios-arrow-forward"></Icon></a>
-				</div>
-
-				<Progress class="music-pro" :percent="Number.parseInt(audio.currTime / audio.duration * 100)" :hide-info="true" status="active" :stroke-width="1"></Progress>
-
-				<Spin size="large" fix v-if="audio.status === 1 || audio.status === 0"></Spin>
-			</Card>
-		</div>
+			<Progress class="music-car-pro" :percent="Number.parseInt(audio.currTime / audio.duration * 100)" :hide-info="true" status="active" :stroke-width="1"></Progress>
+		</Card>
 	</div>
 </template>
 
 <script>
+	import Velocity from 'velocity-animate'
 	import audio_visualizer from '@/utils/utils'
 	import { mapGetters, mapActions } from 'vuex'
+
 	export default {
 		data(){
 			return {
-				pauseIco: 'pause',
-				isMax: true,
+				topMenuShow: false,
+				state: 1,	// 状态，0 最小化 1 正常 2 最大
+
 				audio: new this.audio_visualizer(),
-				musicBuffer: {},
 				playIndex: 0,
 				musicListIsShow: false
 			}
 		},
 
 		methods: {
+			// 动画事件
+			menuBeforeEnter: function (el) {
+				el.style.top = "-10px"
+				el.style.opacity = 0
+			},
+			menuEnter: function (el,done) {
+				Velocity(el, {	// 动画属性
+					opacity: 1,
+					top: "-18px",
+				}, {	// 动画配置项
+					duration: 100,	// 动画执行时间
+					display:'block',
+					complete: done,
+				})
+			},
+			menuLeave: function (el,done) {
+				Velocity(el, {	// 动画属性
+					opacity: 0,
+					top: "-10px",
+				}, {	// 动画配置项
+					duration: 100,	// 动画执行时间
+					display:'none',
+					complete: done,
+				})
+			},
+
+			// 最小化事件
+			min: function () {
+				if (this.state !== 1) {
+					this.state = 1
+					Velocity(this.$el.firstChild, {
+						height: '100px',
+						width: '100px',
+					}, {
+						duration: 100,
+					})
+					Velocity(this.$el, {
+						height: '100px',
+						width: '100px',
+					}, {
+						duration: 200,
+					})
+				} else {
+					this.state = 0
+					Velocity(this.$el.firstChild, {
+						height: '25px',
+						width: '100px',
+					}, {
+						duration: 100,
+					})
+					Velocity(this.$el, {
+						height: '25px',
+						width: '100px',
+					}, {
+						duration: 200,
+					})
+				}
+			},
+			max: function () {
+				if (this.state !== 3) {
+					this.state = 3
+					Velocity(this.$el.firstChild, {
+						height: '300px',
+						width: '300px',
+					}, {
+						duration: 100,
+					})
+					Velocity(this.$el, {
+						height: '300px',
+						width: '300px',
+					}, {
+						duration: 200,
+					})
+				}
+			},
+
 			pre: function () {
 				if (this.playIndex == 0) {
 					this.audio.play(this.musicList[this.musicList.length - 1])
@@ -97,9 +156,6 @@
 				this.audio.changVol(value)
 			},
 
-			showMusicList: function () {
-				this.musicListIsShow = !this.musicListIsShow
-			}
 		},
 
 		computed: mapGetters({
@@ -116,7 +172,7 @@
 				let min = Number.parseInt(value / 60)
 				let s = Number.parseInt(value - min * 60).toString()
 				return min.toString() + ':' + (s.length > 1 ? s : '0' + s)
-			}
+			},
 		},
 
 		watch: {
@@ -128,151 +184,113 @@
 						this.audio.isEnd = false
 					}
 				},
-				deep:true
-			}
-		}
+				deep:true,
+			},
+		},
 	}
 </script>
 
 <style scoped lang="less">
-	@min-music-width-height:100px;
-	@max-music-width-height:300px;
+	@import "../../assets/css/style.less";
+	@min-music-width-height: 100px;
+	@max-music-width-height: 300px;
+	a { color: @unhover-color; }
 
-	.music(@sixe) {
-		.ivu-card {
-			width: @sixe;
-			height: @sixe;
+	// vue 动画
+	.music-list-enter-active {
+		transition: width .3s;
+	}
+	// .music-list-leave-active {
+	// 	transition: width .3s;
+	// }
+	.music-list-enter{
+		transform: translateX(10px);
+	}
+	// .music-list-leave-to {
+	// 	transform: translateX(10px);
+	// 	// opacity: 100;
+	// }
+
+	.music-car {
+		width: @min-music-width-height;
+		height: @min-music-width-height;
+		text-align: center;
+		&-menu-list {
+			position: relative;
+			text-align: right;
+			top: -18px;
+			height: 0px;
 			&:hover {
-				.menu-top {
-					display: inline-block;
-				}
-			}
-			.menu-top {
 				cursor: pointer;
-				display: none;
-			}
-			.music-pro {
-				position: absolute;
-				bottom: 9px;
-				height: 1px;
 			}
 		}
-	}
+		&:hover &-menu-list {
+			animation: menu-in 1s;
+			-webkit-animation: menu-in 1s;
+		}
 
-	.music-body() {
-		.menu-control {
+		&-infor {
+			font-size: 10px;
+			color: @font-color;
+		}
+
+		&-control-list {
+			line-height: 22px;
 			a {
-				color: #5c6b77;
+				display: inline-block;
+				width: 20%;
 			}
 		}
+
+		&-list {
+			height: @max-music-width-height - 4;
+			float: left;
+			position: absolute;
+			background-color: transparent;
+
+			// 菜单显示隐藏按钮
+			.ivu-btn {
+				width: 20px;
+				height: 20px;
+				padding: 0px 5px;
+				margin-left: 1px;
+				border-radius: 0px;
+				background-color: #fff;
+
+			}
+			// 菜单
+			.music-list {
+				background-color: #fff;
+				float: left;
+				width: 120px;
+				z-index: 20;
+				height: @max-music-width-height - 4;
+				border-right: 1px solid #dddee1;
+				overflow: auto;
+				ul li {
+					&:hover {
+						cursor: pointer;
+						box-shadow: 1px 0px 1px 0px #aaa;
+					}
+				}
+			}
+		}
+
+		&-pro {
+			position: absolute;
+			bottom: -9px;
+			right: 0;
+		}
+
+		&-canvas {
+			// border: 1px solid;
+			position: absolute;
+			right: 0;
+			bottom: 1px;
+			width: @max-music-width-height - 2;
+			height: 100px;
+		}
+
 	}
 
-	#music {
-		#min-card {
-			width: @min-music-width-height;
-			.music(@min-music-width-height);
-			.ivu-card {
-				.music-body;
-				.infor {
-					height: 60px;
-					padding-top: 15px;
-					text-align: center;
-					overflow:hidden;
-					p {
-						line-height: 20px;
-					}
-					.title{
-						margin-left: 10px;
-						width: 80px;
-						
-						font-size: 5px;
-
-						overflow: hidden;
-						white-space: nowrap;
-						text-overflow: hidden;
-					}
-				}
-				.menu-control {
-					// margin-top: 40px;
-					margin-left: 10px;
-					.ivu-icon {
-						margin-left: 11px;
-						// &:hover{
-						// 	font-size: 20px;
-						// }
-					}
-				}
-			}
-		}
-
-		#max-card {
-			width: @max-music-width-height;
-			.music(@max-music-width-height);
-			.ivu-card {
-				.menu-top {
-					position: absolute;
-					top: 8px;
-					right: 8px;
-					z-index: 20;
-				}
-				.list {
-					height: @max-music-width-height - 4;
-					float: left;
-					position: absolute;
-					z-index: 20;
-					background-color: #fff;
-					// 菜单显示隐藏按钮
-					.ivu-btn {
-						width: 20px;
-						height: 20px;
-						padding: 1px 5px;
-						border-radius: 0;
-					}
-					// 菜单
-					.music-list {
-						// background-color: #000;
-						float: left;
-						width: 120px;
-						height: @max-music-width-height - 4;
-						border-right: 1px solid #dddee1;
-						overflow: auto;
-						ul li {
-							text-align: center;
-							&:hover {
-								cursor: pointer;
-								box-shadow: 1px 0px 1px 0px #aaa;
-								color: #00d1b2;
-							}
-						}
-					}
-				}
-				// 主体
-				.main-music {
-					width: @max-music-width-height;
-					height: @max-music-width-height;
-					position: absolute;
-					z-index: 10;
-					text-align: center;
-					.music-body;
-					.infor {
-						margin-top: 40px;
-					}
-					.menu-control {
-						margin-right: 18px;
-						
-						.ivu-icon {
-							font-size: 20px;
-							margin-left: 20px;
-						}
-					}
-					.volume-control {
-						padding: 0px 40px;
-					}
-				}
-				.music-pro {
-					height: 2px;
-				}
-			}
-		}
-	}
 </style>

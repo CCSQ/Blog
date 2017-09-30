@@ -1,16 +1,12 @@
+@import "style.less";
 // light主题菜单选中颜色
-@sele-menu-light-color: #00d1b2;
-
-// 定义全局Css
-* {
-	// border: 1px solid red;
-}
+@sele-menu-light-color: @select-color;	// 颜色，绿色
 
 html,body {
 	height: 100%;
 	margin: 0px;
+	background: #eee;
 }
-
 
 // 竖排菜单
 .ivu-menu-vertical {
@@ -37,7 +33,7 @@ html,body {
 
 	.ivu-menu {
 		border-left: 1px solid #dbdbdb;
-		margin-left: 40px;
+		margin-left: 18px;
 		margin-right: 10px;
 		padding-left: 10px;
 	}
@@ -45,8 +41,13 @@ html,body {
 	// 带展开菜单
 	.ivu-menu-submenu {
 		.ivu-menu-item {
-			padding-left: 0px;
+			padding-left: 15px;
 		}
+	}
+
+	.ivu-menu-submenu-title {
+		padding-left: 0;
+		padding: 4px 10px;
 	}
 }
 
@@ -64,49 +65,64 @@ html,body {
 
 // 卡片
 .ivu-card {
+	border-radius: 0;
 	// 卡片右上角
-	.ivu-card-extra {
+	&-extra {
 		right: 10px;
 		top: 10px;
 	}
 	
 	// 卡片主体
-	.ivu-card-body {
+	&-body {
 		padding: 0px;
 	}
 }
 
-
-
 // 字体图标
 .ivu-icon {
-	margin-right: 5px;
+	// margin-right: 5px;
 }
 
+// 输入表单
+.ivu-form {
+	&-item {
+		// label 特效
+		// &-label {
+		// 	position: absolute;
+		// 	bottom: 10px;
+		// }
+		&-content {
+			.ivu-input-wrapper {
+				.ivu-input {
+					border-radius: 0px;
+					border: 0px;
+					border-bottom: 1px solid @input-unselect-color;
+					&:focus {
+						box-shadow: 0 0 0 0;
+						border-bottom: 1px solid @sele-menu-light-color;
+					}
+				}
+			}
+		}
+	}
+}
 
 // 未关联主体
 .ivu-progress-bg {
 	background-color: @sele-menu-light-color;
 }
+
 .ivu-icon {
 	&:hover {
 		color: @sele-menu-light-color;
 	}
 }
 
-// 主题
-// 菜单 dark 主题颜色
-.ivu-menu-dark {
-	background: #373d41;
-}
-
-
 // 菜单 light 主题颜色
 .ivu-menu-light {
 	a {
-		color:#4a4a4a;
+		color: #4a4a4a;
 	}
-	// border-right: 1px solid;
 }
 
 // 竖排选中菜单
@@ -135,5 +151,15 @@ html,body {
 		&:hover {
 			border-bottom: 1px solid @sele-menu-light-color;
 		}
+	}
+}
+
+// 滑块
+.ivu-slider-wrap {
+	.ivu-slider-bar {
+		background: @sele-menu-light-color;
+	}
+	.ivu-slider-button-wrap .ivu-tooltip .ivu-tooltip-rel .ivu-slider-button {
+		border-color: @sele-menu-light-color;
 	}
 }
