@@ -1,10 +1,11 @@
 <template>
 	<div id="foot">
-		<div id="block" class="ivu-menu-light" v-if="!isXs"></div>
+		<music></music>
 	</div>
 </template>
 
 <script>
+	import Music from '@/components/app/Music'
 	import { mapGetters, mapActions } from 'vuex'
 	export default {
 		data(){
@@ -21,12 +22,14 @@
 			isXs: 'getIsXs',
 		}),
 
+		components: { Music },
+
 	}
 </script>
 
 <style scoped>
-	#block {
-		width: 180px;
-		height: 100%;
+	#foot {
+		border-top: 1px solid #dbdbdb;
+		background-color: #FFF;
 	}
 </style>

@@ -1,38 +1,16 @@
 <template>
 	<div id="header">
-		<Menu mode="horizontal" theme="light" active-name="default" @on-select="selectMenu">
-			<!-- <template v-if="!isXs"> -->
-			<template>
-				<MenuItem name="default">
-					<router-link :to="'/systemErr/404'"><Icon type="ios-paper" class="menu-icon"></Icon>站点主页</router-link>
-				</MenuItem>
-				<MenuItem v-for="(item, index) in navList" :key="item.id" :name="index">
-					<router-link :to="item.url"><Icon :type="item.icon" class="menu-icon"></Icon>{{ item.name }}</router-link>
-				</MenuItem>
-			</template>
-
-			<!-- 小屏操作 -->
-			<!-- <template v-if="isXs">
-				<MenuItem name="openMenu"><Icon type="close-round" id="closeButton" :class="{ active: menuShow, close: !menuShow }"></Icon></MenuItem>
-			</template> -->
+		<Menu id="topMenu" mode="horizontal" theme="light" active-name="default" @on-select="selectMenu">
+			<Submenu name="user-name">
+				<template slot="title">
+					name
+					<Badge dot>
+						<Avatar>N</Avatar>
+					</Badge>
+				</template>
+				<MenuItem name="exit">退出</MenuItem>
+			</Submenu>
 		</Menu>
-
-		<!-- 小屏处理 -->
-		<!-- <transition name="slide-fade" v-if="isXs">
-			<Menu class="xs-menu" v-show="menuShow" theme="dark" width="100%">
-				<MenuGroup title="内容管理">
-					<Submenu name="1">
-						<template slot="title">
-							<Icon type="ios-paper"></Icon>
-							内容管理
-						</template>
-						<MenuItem name="1-1">文章管理</MenuItem>
-						<MenuItem name="1-2">评论管理</MenuItem>
-						<MenuItem name="1-3">举报管理</MenuItem>
-					</Submenu>
-				</MenuGroup>
-			</Menu>
-		</transition> -->
 	</div>
 </template>
 
@@ -41,41 +19,46 @@
 	export default {
 		data(){
 			return {
-				// menuShow : false,
 			}
 		},
 
 		methods: {
 			...mapActions({
-				setNavList: 'setNavList',
-				setChildNavList: 'setChildNavList',
+				setTestIsLoginOut: 'setTestIsLoginOut',
 			}),
 
 			selectMenu: function (index) {
-				if (index === 'openMenu') {
-					this.menuShow = !this.menuShow
-					return
+				if (index === 'exit') {
+					this.setTestIsLoginOut()
 				}
-				this.setChildNavList(index)
+
 			},
 
 		},
 
-		computed: mapGetters({
-			navList: 'getNavList',
-			isXs: 'getIsXs',
-		}),
 
 		mounted: function() {
-			if (this.navList.length == 0) this.setNavList()
+
 		}
 	}
 </script>
 
 <style scoped lang="less">
 
+	#header {
+		background: #FFF;
+		width: 100%;
+		height: 50px;
+		border-bottom: 1px solid #dbdbdb;
+		padding: 0px 60px;
+	}
+
 	.menu-icon {
 		margin-right: 10px;
+	}
+
+	#topMenu {
+		float: right;
 	}
 	// .xs-menu {
 	// 	float: left;

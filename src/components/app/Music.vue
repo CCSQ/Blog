@@ -3,12 +3,12 @@
 
 		<!-- <audio src="../../assets/music/demo.mp3" controls=""></audio> -->
 		<Card class="music-car" >
-			<transition @before-enter="menuBeforeEnter" @enter="menuEnter" @leave="menuLeave">
+			<!-- <transition @before-enter="menuBeforeEnter" @enter="menuEnter" @leave="menuLeave">
 				<div class="music-car-menu-list" v-show="topMenuShow">
 					<a href="#" @click="min"><Icon :type="state === 1 ? 'minus' : 'arrow-resize'"></Icon></a>
 					<a href="#" @click="max" v-show="state !== 3"><Icon type="arrow-expand"></Icon></a>
 				</div>
-			</transition>
+			</transition> -->
 
 			<div class="music-car-list" v-show="state === 3">
 				<transition name="music-list">
@@ -163,6 +163,7 @@
 		}),
 
 		mounted: function() {
+			this.min()
 			this.audio.init()
 			if (this.musicList.length > 0) this.audio.play(this.musicList[0])
 		},

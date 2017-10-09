@@ -25,3 +25,13 @@ export const setIsLogin = ({commit}) => {
 	// 从服务端获取
 	commit(types.SET_IS_LOGIN, false)
 }
+
+export const setTestIsLogin = ({commit}) => {
+	// 从服务端获取
+	commit(types.SET_IS_LOGIN, true)
+}
+
+export const setTestIsLoginOut = ({commit}) => {
+	// 从服务端获取
+	commit(types.SET_IS_LOGIN, false)
+}

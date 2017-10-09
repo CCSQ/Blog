@@ -55,12 +55,26 @@ html,body {
 .ivu-menu-horizontal {
 	height: 50px;
 	line-height: 50px;
-	.ivu-menu-item:first-child {
-		width: 180px;
-		padding: 0;
-		text-align: center;
-		font-size: 18px;
-	}
+	// .ivu-menu-item:first-child {
+	// 	width: 180px;
+	// 	padding: 0;
+	// 	text-align: center;
+	// 	font-size: 18px;
+	// }
+}
+
+.ivu-menu-light.ivu-menu-horizontal .ivu-menu-item-active, .ivu-menu-light.ivu-menu-horizontal .ivu-menu-item:hover, .ivu-menu-light.ivu-menu-horizontal .ivu-menu-submenu-active, .ivu-menu-light.ivu-menu-horizontal .ivu-menu-submenu:hover {
+	color: @sele-menu-light-color;
+	border-bottom: 2px solid @sele-menu-light-color;
+}
+
+.ivu-menu-light.ivu-menu-horizontal .ivu-menu-item:hover {
+	border-bottom: 1px solid @sele-menu-light-color;
+}
+
+.ivu-menu-horizontal .ivu-menu-submenu .ivu-select-dropdown .ivu-menu-item-selected, .ivu-menu-horizontal .ivu-menu-submenu .ivu-select-dropdown .ivu-menu-item-selected:hover {
+	color: #fff;
+	background: @sele-menu-light-color;
 }
 
 // 卡片
@@ -84,26 +98,27 @@ html,body {
 }
 
 // 输入表单
-.ivu-form {
-	&-item {
-		// label 特效
-		// &-label {
-		// 	position: absolute;
-		// 	bottom: 10px;
-		// }
-		&-content {
-			.ivu-input-wrapper {
-				.ivu-input {
-					border-radius: 0px;
-					border: 0px;
-					border-bottom: 1px solid @input-unselect-color;
-					&:focus {
-						box-shadow: 0 0 0 0;
-						border-bottom: 1px solid @sele-menu-light-color;
-					}
-				}
-			}
-		}
+.ivu-input {
+	background-color: unset;
+	border-radius: 0px;
+	border: 0px;
+	border-bottom: 1px solid @input-unselect-color;
+	&:focus {
+		box-shadow: 0 0 0 0;
+		border-bottom: 1px solid @sele-menu-light-color;
+	}
+
+	&:hover {
+		border-color: @sele-menu-light-color;
+	}
+}
+
+// 错误信息框
+.ivu-form-item-error .ivu-input {
+	border: 0px;
+	border-bottom: 1px solid red;
+	&:focus {
+		box-shadow: 0 0 0 0;
 	}
 }
 
@@ -127,6 +142,7 @@ html,body {
 
 // 竖排选中菜单
 .ivu-menu-light.ivu-menu-vertical {
+	// padding-top: 100%;
 	.ivu-menu-item-active {
 		&:not(.ivu-menu-submenu) {
 			background: @sele-menu-light-color;
@@ -162,4 +178,39 @@ html,body {
 	.ivu-slider-button-wrap .ivu-tooltip .ivu-tooltip-rel .ivu-slider-button {
 		border-color: @sele-menu-light-color;
 	}
+}
+
+// 开关
+.ivu-switch-checked {
+	border-color: @sele-menu-light-color;
+	background-color: @sele-menu-light-color;
+}
+
+// 确定按钮
+.ivu-btn-primary {
+	color: #fff;
+	background-color: @sele-menu-light-color;
+	border-color: @sele-menu-light-color;
+	&:hover {
+		background-color: @sele-menu-light-color + 20;
+		border-color: @sele-menu-light-color + 20;
+	}
+}
+
+
+// 自定义css类
+.float-right {
+	float: right;
+	margin-right: 10px;
+}
+
+.float-left {
+	float: left;
+	margin-left: 10px;
+}
+
+.help-font {
+	color: #9ea7b4;
+	font-size: 10px;
+	margin: 0px 4px;
 }

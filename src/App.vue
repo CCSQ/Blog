@@ -1,14 +1,13 @@
 <template>
 	<div id="app">
 		<template v-if="isLogin">
+			<left-nav></left-nav>
 			<header-nav></header-nav>
-			<left-nav v-if="leftNavShow"></left-nav>
-			<router-view></router-view>
-			<!-- <div style="border: 1px solid; height:100px">
-				<div>nihao</div>
-			</div> -->
+			<Card id="main-body" dis-hover>
+				<router-view></router-view>
+			</Card>
 			<foot></foot>
-			<music></music>
+			<BackTop></BackTop>
 		</template>
 		<template v-else>
 			<login></login>
@@ -66,15 +65,26 @@ export default {
 	}
 
 	#leftNav {
-		display: inline-block;
-		height: 90%;
+		float: left;
+		position: fixed;
+		z-index: 100;
+		height: 100%;
+	}
+
+	#main-body {
+		position: absolute;
+		top: 50px;
+		left: 180px;
+		right: 0px;
+		min-height: 90%;
 	}
 
 	#foot {
-		bottom: 0px;
-		width: 100%;
-		height: 10%;
 		position: fixed;
+		right: 0px;
+		bottom: 0px;
+		left: 181px;
+		height: 5%;
 	}
 
 	#music {
