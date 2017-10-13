@@ -1,6 +1,6 @@
 <template>
 	<div id="foot">
-		<music></music>
+		<music class="float-right"></music>
 	</div>
 </template>
 

@@ -6,6 +6,63 @@ var isFunction = (object) => {
 	return typeof object === "function"
 }
 
+// 是否数字
+var isNumber = (object) => {
+	return typeof object === "number"
+}
+
+// 是否对象
+var isObject = (onject) => {
+	return typeof object === "object"
+}
+
+// 字符串是否为空
+var stringIsNotNull = (string) => {
+	return string != '' && string
+}
+
+// 替换字符串，通过序号%0-%n
+var replaceString = (string, ...values) => {
+	for (var i = 0; i < values.length; i++) {
+		string = string.replace('%'+i, values[i])
+	}
+	return string
+}
+
+// string => number
+var string2NumberInt = (string) => {
+	let num = Number.parseInt(string)
+	return num ? num : 0
+}
+
+// string => float
+var string2NumberFloat = (string) => {
+	let num = Number.parseFloat(string)
+	return num ? num : 0.0
+}
+
+// 判断某项是否在数组内
+var itemInArray = (item, array) => {
+	if (isObject(array)) {
+		return console.error(array, '非数组')
+	}
+
+	let i = array.length
+
+	while(i--) {
+		if (item === array[i]) {
+			return true
+		}
+	}
+	return false
+}
+
+// 将网易云音乐的歌曲时间转换为毫秒时间
+var changLrcTime = (string) => {
+	let data = string.split(':')
+	return string2NumberFloat((string2NumberInt(data[0]) * 60 + string2NumberFloat(data[1])).toFixed(2))
+}
+
 // 兼容写法，获取动画调用接口
 var animationFrame = (() => {
 	return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {
@@ -126,8 +183,6 @@ Particle.prototype = {
 	}
 }
 
-
-
 export default{
 	install(Vue,options)
 	{
@@ -137,6 +192,8 @@ export default{
 
 		Vue.prototype.utils.isFunction = isFunction
 		Vue.prototype.utils.animationFrame = animationFrame
+		Vue.prototype.utils.replaceString = replaceString
+		Vue.prototype.utils.itemInArray = itemInArray
 
 		// 音频相关类
 		Vue.prototype.audio_visualizer = function () {
@@ -156,12 +213,44 @@ export default{
 			this.musicBuffer = {}	// 缓存
 			this.playId = 0	// 当前播放id
 			this.gainNode = null	// 音量相关
+			this.uint8ArrayData = []
+			this.canvasObj = null	// canvas对象
+			this.gradient = null	// 渐变对象
+			this.lrc = null	// 歌词
+			this.nowLrc = ''	// 当前歌词
 		}
 
 		Vue.prototype.audio_visualizer.prototype = {
 			// 初始化函数
 			init: function () {
 				this._prepareAPI()
+			},
+
+			getUint8ArrayData: function () {
+				return this.uint8ArrayData
+			},
+
+			setCanvasObj: function (canvasObj) {
+				this.canvasObj = canvasObj
+				// 设置渐变
+				this.gradient = this.canvasObj.getCtx().createLinearGradient(0, 0, 200, 0)
+				this.gradient.addColorStop(1, '#f00')
+				this.gradient.addColorStop(0.5, '#ff0')
+				this.gradient.addColorStop(0, '#0f0')
+			},
+
+			setLrc: function (lrc) {
+				this.lrc = lrc
+				this.lrc.lrc.lyricData = []
+				this.lrc.lrc.lyric.split('\n').forEach((item)=>{
+					if (stringIsNotNull(item)) {
+						let data = item.replace('[','').split(']')
+						this.lrc.lrc.lyricData.push({
+							time: changLrcTime(data[0]),
+							string: data[1]
+						})
+					}
+				})
 			},
 
 			play: function ({id = 0, url = '', name = ''}) {
@@ -308,6 +397,7 @@ export default{
 				audioBufferSouceNode.onended = () => {
 					// 判断为自然结束
 					if (this.duration - this.currTime < 0.1) this.isEnd = true
+
 					console.log("播放结束")
 				}
 
@@ -320,10 +410,59 @@ export default{
 
 			// 可视化处理
 			_drawSpectrum: function (analyser,audioBufferSouceNode) {
+				var capYPositionArray = []	// 高度数据
+				var meterNum = this.canvasObj.getHeight() / 2	// 取出数量
 				// 1024位处理
 				var draw = () => {
-					let array = new Uint8Array(analyser.frequencyBinCount)
-					analyser.getByteFrequencyData(array)	// 将当前频域数据拷贝进Uint8Array数组（无符号字节数组）。
+					// 播放结束，取消动画
+					if (this.isEnd || this.status === 0) {
+						this.uint8ArrayData = []
+						cancelAnimationFrame(this.animationId)
+						return
+					}
+					this.uint8ArrayData = new Uint8Array(analyser.frequencyBinCount)
+					analyser.getByteFrequencyData(this.uint8ArrayData)	// 将当前频域数据拷贝进Uint8Array数组（无符号字节数组）。
+
+					// 画出音频图
+					if (this.canvasObj) {
+						this.canvasObj.getCtx().clearRect(0, 0, this.canvasObj.getWidth(), this.canvasObj.getHeight())
+						
+
+						let step = Math.round(this.uint8ArrayData.length / meterNum)	// 获取间隔
+						for (let i = 0; i < meterNum; i++) {
+							let value = this.uint8ArrayData[i * step]
+							if (capYPositionArray.length < Math.round(meterNum)) capYPositionArray.push(value)
+
+
+							// 暂停
+							if (this.status === 2) {
+								value = -- capYPositionArray[i] - 10
+							}
+
+							// 画黑点
+							this.canvasObj.getCtx().fillStyle = '#000'
+							if (value < capYPositionArray[i]) {
+								this.canvasObj.getCtx().fillRect(--capYPositionArray[i], this.canvasObj.getHeight() - i * 2, 1, 1)
+							} else {
+								capYPositionArray[i] = value
+								this.canvasObj.getCtx().fillRect(capYPositionArray[i] + 1, this.canvasObj.getHeight() - i * 2, 1, 1)
+							}
+							// 画线
+							this.canvasObj.getCtx().fillStyle = this.gradient
+							this.canvasObj.getCtx().fillRect(0, this.canvasObj.getHeight() - i * 2, value, 1)
+						}
+					}
+
+					// 歌词显示
+					if (this.lrc) {
+						this.currTime = string2NumberFloat(this.currTime.toFixed(2))
+						for (var i = 0; i < this.lrc.lrc.lyricData.length; i++) {
+							if (!this.lrc.lrc.lyricData[i + 1] || this.currTime >= this.lrc.lrc.lyricData[i].time && this.currTime < this.lrc.lrc.lyricData[i + 1].time) {
+								this.nowLrc = this.lrc.lrc.lyricData[i].string
+								break
+							}
+						}
+					}
 					this.animationId = requestAnimationFrame(draw)
 				}
 				this.animationId = requestAnimationFrame(draw)
@@ -365,9 +504,7 @@ export default{
 			this.particleSize_y = particleSize_y
 			this.particleArray = []	// 粒子队列
 			// this.animateArray = []	// 动画队列
-
 		}
-
 
 		Vue.prototype.canvas_particle.prototype = {
 			init: function () {
@@ -528,7 +665,48 @@ export default{
 					})
 				}
 			},
+		}
 
+		// canvas 画笔相关
+		Vue.prototype.canvas_draw = function ({
+			element = null,
+			data = [],
+		}) {
+			this.element = element	// 节点
+			this.data = data
+
+			this.ctx = null
+			this.width = 0
+			this.height = 0
+		}
+
+		Vue.prototype.canvas_draw.prototype = {
+			init: function () {
+				if (!this.element) return console.error('节点不存在！')
+				this.ctx = this.element.getContext('2d')
+				this.width = this.element.width
+				this.height = this.element.height
+			},
+
+			getCtx: function () {
+				return this.ctx
+			},
+
+			getWidth: function () {
+				return this.width
+			},
+
+			getHeight: function () {
+				return this.height
+			},
+
+			animationDraw: function () {
+				var draw = () => {
+					console.log(this.data)
+					animationFrame(draw)
+				}
+				animationFrame(draw)
+			},
 		}
 	}
 }

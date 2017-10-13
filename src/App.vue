@@ -1,13 +1,13 @@
 <template>
 	<div id="app">
-		<template v-if="isLogin">
+		<template v-if="!isLogin">
 			<left-nav></left-nav>
 			<header-nav></header-nav>
 			<Card id="main-body" dis-hover>
 				<router-view></router-view>
 			</Card>
 			<foot></foot>
-			<BackTop></BackTop>
+			<BackTop :bottom="60"></BackTop>
 		</template>
 		<template v-else>
 			<login></login>
@@ -19,14 +19,13 @@
 import HeaderNav from '@/components/app/Header'
 import LeftNav from '@/components/app/LeftNav'
 import Foot from '@/components/app/Foot'
-import Music from '@/components/app/Music'
 import Login from '@/components/app/Login'
 import store from '@/vuex/store'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
 	name: 'app',
-	components: { HeaderNav, LeftNav, Foot, Music, Login },
+	components: { HeaderNav, LeftNav, Foot, Login },
 	store,
 	data() {
 		return {
@@ -77,6 +76,10 @@ export default {
 		left: 180px;
 		right: 0px;
 		min-height: 90%;
+		background: #eee;
+		padding: 10px 10px;
+		padding-right: 0;
+		margin-bottom: 4%;
 	}
 
 	#foot {
@@ -85,11 +88,5 @@ export default {
 		bottom: 0px;
 		left: 181px;
 		height: 5%;
-	}
-
-	#music {
-		right: 10px;
-		bottom: 10px;
-		position: fixed;
 	}
 </style>

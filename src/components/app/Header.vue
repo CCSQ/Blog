@@ -3,12 +3,14 @@
 		<Menu id="topMenu" mode="horizontal" theme="light" active-name="default" @on-select="selectMenu">
 			<Submenu name="user-name">
 				<template slot="title">
-					name
-					<Badge dot>
-						<Avatar>N</Avatar>
+					{{user.name}}
+					<Badge dot :count="user.message.toString()">
+						<Avatar :src="user.avatarUrl">{{user.name[0]}}</Avatar>
 					</Badge>
 				</template>
-				<MenuItem name="exit">退出</MenuItem>
+				<MenuItem name="message">{{$t('sys.message')}}<Badge class="float-right" :count="user.message.toString()"></Badge></MenuItem>
+				<router-link to="/to"><MenuItem name="set">{{$t('sys.sets')}}<Icon class="float-right" type="android-options"></Icon></MenuItem></router-link>
+				<MenuItem name="exit">{{$t('sys.exit')}}</MenuItem>
 			</Submenu>
 		</Menu>
 	</div>
@@ -19,6 +21,11 @@
 	export default {
 		data(){
 			return {
+				user: {
+					name: 'all index',
+					avatarUrl: '',
+					message: 10,
+				}
 			}
 		},
 
@@ -60,47 +67,4 @@
 	#topMenu {
 		float: right;
 	}
-	// .xs-menu {
-	// 	float: left;
-	// 	z-index: 100;
-	// }
-
-	// /*过渡动效*/
-	// .slide-fade-enter-active {
-	// 	transition: all .3s ease;
-	// }
-	// .slide-fade-leave-active {
-	// 	transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-	// }
-	// .slide-fade-enter, .slide-fade-leave-to {
-	// 	transform: translateY(-10px);
-	// 	opacity: 0;
-	// }
-
-	// #closeButton {
-	// 	font-size: 20px;
-	// 	transform: rotate(45deg);
-	// }
-
-	// .active {
-	// 	animation: rotate(45deg) 0.5s;
-	// 	/*-webkit-animation: deg45Rotate 0.5s;*/
-	// }
-
-	// .close {
-	// 	/*animation-direction:reverse;
-	// 	animation: deg45Rotate 0.5s;*/
-	// }
-
-	// @keyframes deg45Rotate
-	// {
-	// 	from {transform: rotate(45deg);}
-	// 	to {transform: rotate(90deg);}
-	// }
-
-	// @-webkit-keyframes deg45Rotate /* Safari 与 Chrome */
-	// {
-	// 	from {transform: rotate(45deg);}
-	// 	to {transform: rotate(90deg);}
-	// }
 </style>

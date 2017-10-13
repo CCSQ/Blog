@@ -4,14 +4,14 @@
 		<Card :bordered="false" id="login-card">
 			<Form ref="formData" :model="formData" :rules="formDataRule">
 				<FormItem prop="name">
-					<Input type="text" v-model="formData.name" placeholder="账户"></Input>
+					<Input type="text" v-model="formData.name" :placeholder="$t('form.account')"></Input>
 				</FormItem>
 				<FormItem prop="password">
-					<Input type="password" v-model="formData.password" placeholder="密码"></Input>
+					<Input type="password" v-model="formData.password" :placeholder="$t('form.password')"></Input>
 				</FormItem>
 				<FormItem>
-					<span class="float-left help-font">记住密码</span><i-switch size="small" v-model="isRemember"></i-switch>
-					<Button class="float-right" type="primary" @click="login('formData')">登录</Button>
+					<span class="float-left help-font">{{$t('form.remember_me')}}</span><i-switch size="small" v-model="isRemember"></i-switch>
+					<Button class="float-right" type="primary" @click="login('formData')">{{$t('form.login')}}</Button>
 				</FormItem>
 			</Form>
 		</Card>
@@ -37,10 +37,10 @@
 
 				formDataRule: {
 					name: [
-						{ type: "string", required: true, max: 20, message: '请填写不大于20个字符的用户名', },
+						{ type: "string", required: true, max: 20, message: this.utils.replaceString(this.$t('help.user_name'), 20), },
 					],
 					password: [
-						{ type: "string", required: true, max: 20, message: '请填写不大于20个字符的密码', },
+						{ type: "string", required: true, max: 20, message: this.utils.replaceString(this.$t('help.user_password'), 20), },
 					],
 				},
 			}
@@ -73,8 +73,6 @@
 			}
 			particlesJS('particles', staticResource.particles)
 		},
-
-
 	}
 </script>
 
@@ -86,6 +84,12 @@
 		padding: 20px;
 		width: 500px;
 		background-color: rgba(255,255,255,0.6);
+	}
+
+	#particles {
+		position: absolute;
+		width: 100%;
+		height: 100%;
 	}
 
 	.menu {

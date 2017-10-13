@@ -113,6 +113,62 @@ html,body {
 	}
 }
 
+// 数字输入框
+.ivu-input-number {
+	border-radius: 0px;
+	border: 0px;
+	border-bottom: 1px solid @input-unselect-color;
+	width: 100%;
+	
+	&:hover {
+		border-color: @sele-menu-light-color;
+	}
+
+	&-handler-wrap {
+		border-left: 0px;
+	}
+
+	&-handler-down {
+		border-top: 0px;
+	}
+}
+.ivu-input-number-focused {
+	box-shadow: 0 0 0 0;
+	border-bottom: 1px solid @sele-menu-light-color;
+}
+
+// 颜色选择框
+.ivu-color-picker {
+	width: 100%;
+	.ivu-select-dropdown {
+		width: auto;
+	}
+}
+
+// 下拉框
+.ivu-select-selection {
+	border-radius: 0;
+	border: 0;
+	border-bottom: 1px solid @input-unselect-color;
+	&:hover {
+		border-color: @sele-menu-light-color;
+	}
+}
+
+.ivu-select-visible .ivu-select-selection {
+	box-shadow: 0 0 0 0;
+	border-bottom: 1px solid @sele-menu-light-color;
+}
+
+.ivu-select-item-selected, .ivu-select-item-selected:hover {
+	color: #fff;
+	background: @select-selected-color;
+}
+
+.ivu-select-item {
+	padding: 2px 16px;
+}
+
 // 错误信息框
 .ivu-form-item-error .ivu-input {
 	border: 0px;
@@ -201,16 +257,24 @@ html,body {
 // 自定义css类
 .float-right {
 	float: right;
-	margin-right: 10px;
+	// margin-right: 10px;
 }
 
 .float-left {
 	float: left;
-	margin-left: 10px;
+	// margin-left: 10px;
 }
 
 .help-font {
 	color: #9ea7b4;
 	font-size: 10px;
 	margin: 0px 4px;
+}
+
+.form-array-item {
+	margin: 10px;
+	padding-right: 20px;
+	padding-top: 10px;
+	border: 1px solid @input-unselect-color;
+	border-radius: 5px;
 }
