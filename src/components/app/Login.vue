@@ -22,7 +22,7 @@
 
 	import { mapGetters, mapActions } from 'vuex'
 	import particles from 'particles.js'
-	import staticResource from '@/utils/staticResource'
+	import publicServices from '@/services/public'
 	import local from '@/local/index'
 
 	export default {
@@ -59,7 +59,8 @@
 						} else {
 							local.deleteByLocalStorage('user')
 						}
-						this.setTestIsLogin()
+						publicServices.login(this.formData).then()
+						// this.setTestIsLogin()
 					}
 				})
 			}
@@ -71,8 +72,20 @@
 				this.formData = localData
 				this.isRemember = true
 			}
-			particlesJS('particles', staticResource.particles)
+
+			var temp = publicServices.getParticlesSet().then((res) => {
+				particlesJS('particles', res.body)
+			})
 		},
+
+		watch: {
+			'isRemember' (to, from) {
+				// 取消记住我，去除localStorage的记录
+				if (!to) {
+					local.deleteByLocalStorage('user')
+				}
+			}
+		}
 	}
 </script>
 

@@ -12,7 +12,8 @@
 	import staticResource from '@/utils/staticResource'
 	
 	import { mapGetters, mapActions } from 'vuex'
-	import { Engine, Render, World, Bodies, MouseConstraint, Composites, Common } from 'matter-js'
+	// import { Engine, Render, World, Bodies, MouseConstraint, Composites, Common } from 'matter-js'
+
 	export default {
 		data(){
 			return {
@@ -21,10 +22,6 @@
 		},
 
 		methods: {
-			...mapActions({
-				setLeftNavShow: 'setLeftNavShow',
-			}),
-
 			createMatterNode: function () {
 				// 创建引擎
 				var engine = Engine.create()
@@ -93,7 +90,6 @@
 		},
 
 		mounted: function() {
-			this.setLeftNavShow(false)
 			this.canvas = new this.canvas_particle({
 				element: document.getElementById("canvas"),
 				title: this.$route.params.type,

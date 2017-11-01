@@ -10,6 +10,7 @@
 				</template>
 				<MenuItem name="message">{{$t('sys.message')}}<Badge class="float-right" :count="user.message.toString()"></Badge></MenuItem>
 				<router-link to="/to"><MenuItem name="set">{{$t('sys.sets')}}<Icon class="float-right" type="android-options"></Icon></MenuItem></router-link>
+				<MenuItem name="clearCache">{{$t('sys.clearCache')}}</MenuItem>
 				<MenuItem name="exit">{{$t('sys.exit')}}</MenuItem>
 			</Submenu>
 		</Menu>
@@ -18,6 +19,7 @@
 
 <script>
 	import { mapGetters, mapActions } from 'vuex'
+	import local from '@/local'
 	export default {
 		data(){
 			return {
@@ -37,6 +39,9 @@
 			selectMenu: function (index) {
 				if (index === 'exit') {
 					this.setTestIsLoginOut()
+				} else if (index === 'clearCache') {
+					// 清空客户端和服务端缓存
+					local.clearAllcache()
 				}
 
 			},

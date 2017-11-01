@@ -1,11 +1,10 @@
 @import "style.less";
-// light主题菜单选中颜色
-@sele-menu-light-color: @select-color;	// 颜色，绿色
 
+// #######################################大小位置等相关########################################################
 html,body {
 	height: 100%;
 	margin: 0px;
-	background: #eee;
+	background: #f5f7f9;
 }
 
 // 竖排菜单
@@ -55,26 +54,6 @@ html,body {
 .ivu-menu-horizontal {
 	height: 50px;
 	line-height: 50px;
-	// .ivu-menu-item:first-child {
-	// 	width: 180px;
-	// 	padding: 0;
-	// 	text-align: center;
-	// 	font-size: 18px;
-	// }
-}
-
-.ivu-menu-light.ivu-menu-horizontal .ivu-menu-item-active, .ivu-menu-light.ivu-menu-horizontal .ivu-menu-item:hover, .ivu-menu-light.ivu-menu-horizontal .ivu-menu-submenu-active, .ivu-menu-light.ivu-menu-horizontal .ivu-menu-submenu:hover {
-	color: @sele-menu-light-color;
-	border-bottom: 2px solid @sele-menu-light-color;
-}
-
-.ivu-menu-light.ivu-menu-horizontal .ivu-menu-item:hover {
-	border-bottom: 1px solid @sele-menu-light-color;
-}
-
-.ivu-menu-horizontal .ivu-menu-submenu .ivu-select-dropdown .ivu-menu-item-selected, .ivu-menu-horizontal .ivu-menu-submenu .ivu-select-dropdown .ivu-menu-item-selected:hover {
-	color: #fff;
-	background: @sele-menu-light-color;
 }
 
 // 卡片
@@ -92,24 +71,14 @@ html,body {
 	}
 }
 
-// 字体图标
-.ivu-icon {
-	// margin-right: 5px;
-}
-
 // 输入表单
 .ivu-input {
 	background-color: unset;
 	border-radius: 0px;
 	border: 0px;
-	border-bottom: 1px solid @input-unselect-color;
+	border-bottom: 1px solid @inline-color;
 	&:focus {
 		box-shadow: 0 0 0 0;
-		border-bottom: 1px solid @sele-menu-light-color;
-	}
-
-	&:hover {
-		border-color: @sele-menu-light-color;
 	}
 }
 
@@ -117,12 +86,8 @@ html,body {
 .ivu-input-number {
 	border-radius: 0px;
 	border: 0px;
-	border-bottom: 1px solid @input-unselect-color;
+	border-bottom: 1px solid @inline-color;
 	width: 100%;
-	
-	&:hover {
-		border-color: @sele-menu-light-color;
-	}
 
 	&-handler-wrap {
 		border-left: 0px;
@@ -134,7 +99,16 @@ html,body {
 }
 .ivu-input-number-focused {
 	box-shadow: 0 0 0 0;
-	border-bottom: 1px solid @sele-menu-light-color;
+}
+
+// 输入组
+.ivu-input-group {
+	.ivu-input-group-prepend, .ivu-input-group-append {
+		border-radius: 0;
+		background-color: #fff;
+		border: 0px;
+		border-bottom: 1px solid #dddee1;
+	}
 }
 
 // 颜色选择框
@@ -149,20 +123,11 @@ html,body {
 .ivu-select-selection {
 	border-radius: 0;
 	border: 0;
-	border-bottom: 1px solid @input-unselect-color;
-	&:hover {
-		border-color: @sele-menu-light-color;
-	}
+	border-bottom: 1px solid @inline-color;
 }
 
 .ivu-select-visible .ivu-select-selection {
 	box-shadow: 0 0 0 0;
-	border-bottom: 1px solid @sele-menu-light-color;
-}
-
-.ivu-select-item-selected, .ivu-select-item-selected:hover {
-	color: #fff;
-	background: @select-selected-color;
 }
 
 .ivu-select-item {
@@ -178,30 +143,11 @@ html,body {
 	}
 }
 
-// 未关联主体
-.ivu-progress-bg {
-	background-color: @sele-menu-light-color;
-}
-
-.ivu-icon {
-	&:hover {
-		color: @sele-menu-light-color;
-	}
-}
-
-// 菜单 light 主题颜色
-.ivu-menu-light {
-	a {
-		color: #4a4a4a;
-	}
-}
-
 // 竖排选中菜单
 .ivu-menu-light.ivu-menu-vertical {
-	// padding-top: 100%;
 	.ivu-menu-item-active {
 		&:not(.ivu-menu-submenu) {
-			background: @sele-menu-light-color;
+			background: @primary-color;
 			border-radius: 2px;
 			border-right: 0px solid #2d8cf0;
 			color: #fff;
@@ -209,60 +155,125 @@ html,body {
 	}
 }
 
+// 模态框
+.ivu-modal {
+	&-content {
+		border-radius: 0px;
+		.ivu-modal-close {
+			right: -20px;
+			top: -30px;
+			.ivu-icon-ios-close-empty {
+				color: #fff;
+				&:hover {
+					// TODO hover旋转
+					// transition: rotate(40deg);
+				}
+			}
+			.ivu-modal-footer {
+				.ivu-btn {}
+			}
+		}
+	}
+}
+
+// 富文本插入url
+.ql-tooltip {
+	margin-left: 180px;
+}
+
+// #####################################################################################################
+
+
+
+// 字体图标
+.ivu-icon {
+	// margin-right: 5px;
+}
+
+// 进度条
+.ivu-progress-bg {
+	background-color: @primary-color;
+}
+
+
+// 菜单 链接颜色
+// .ivu-menu-light {
+	a {
+		color: #4a4a4a;
+		&:hover {
+			color: #4a4a4a;
+		}
+	}
+// }
+
+
+
 // 横排选中菜单
 .ivu-menu-light.ivu-menu-horizontal {
 	.ivu-menu-item-active {
-		color: @sele-menu-light-color;
-		border-bottom: 1px solid @sele-menu-light-color;
+		// color: @sele-menu-light-color;
+		// border-bottom: 1px solid @sele-menu-light-color;
 		&:hover {
-			color: @sele-menu-light-color;
+			// color: @sele-menu-light-color;
 		}
 	}
 
 	.ivu-menu-item {
 		&:hover {
-			border-bottom: 1px solid @sele-menu-light-color;
+			// border-bottom: 1px solid @sele-menu-light-color;
 		}
 	}
 }
 
-// 滑块
-.ivu-slider-wrap {
-	.ivu-slider-bar {
-		background: @sele-menu-light-color;
-	}
-	.ivu-slider-button-wrap .ivu-tooltip .ivu-tooltip-rel .ivu-slider-button {
-		border-color: @sele-menu-light-color;
-	}
-}
-
-// 开关
-.ivu-switch-checked {
-	border-color: @sele-menu-light-color;
-	background-color: @sele-menu-light-color;
-}
-
-// 确定按钮
-.ivu-btn-primary {
-	color: #fff;
-	background-color: @sele-menu-light-color;
-	border-color: @sele-menu-light-color;
+// 高亮代码序号
+.hljs ul li {
+	list-style-type: decimal-leading-zero !important;
+	margin-left: 20px;
+	padding-left: 10px !important;
+	border-left: 1px solid #ddd;
+	font-size: 12px;
+	line-height: 20px;
 	&:hover {
-		background-color: @sele-menu-light-color + 20;
-		border-color: @sele-menu-light-color + 20;
+		background: none;
+	}
+
+	&::before {
+		content: none !important;
+	}
+
+	&:not(.light):hover {
+		background: #393a3c8a;
+	}
+}
+
+// 模态框垂直居中
+.vertical-center-modal {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	.ivu-modal{
+		top: 0;
+	}
+}
+
+// 模态框脚部隐藏
+.vertical-foot-hidden {
+	.ivu-modal-footer {
+		display: none;
 	}
 }
 
 
-// 自定义css类
+
+// ######################################自定义css类##############################################################
+
 .float-right {
 	float: right;
-	// margin-right: 10px;
 }
 
 .float-left {
 	float: left;
-	// margin-left: 10px;
 }
 
 .help-font {
@@ -275,6 +286,37 @@ html,body {
 	margin: 10px;
 	padding-right: 20px;
 	padding-top: 10px;
-	border: 1px solid @input-unselect-color;
+	border: 1px solid @inline-color;
 	border-radius: 5px;
 }
+
+.rotate-90 {
+	-webkit-transform: rotate(-90deg);
+	moz-transform: rotate(-90deg);
+}
+
+.code-type {
+	float: right;
+	font-size: 30px;
+	color: #eee;
+	pointer-events: none;
+}
+
+.copy-text {
+	float: right;
+	cursor: pointer;
+	color: #eee;
+}
+
+.line-num {
+	position: absolute;
+	height: 20px;
+	left: 15px;
+	width: 42px;
+	cursor: pointer;
+}
+
+.light {
+	background-color: #393a3c8a;
+}
+// ###############################################################################################################

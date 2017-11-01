@@ -1,12 +1,24 @@
 <template>
 	<div id="app">
 		<template v-if="!isLogin">
-			<left-nav></left-nav>
+			<left-nav v-on:menuToggel="toggelMenu"></left-nav>
 			<header-nav></header-nav>
-			<Card id="main-body" dis-hover>
-				<router-view></router-view>
+
+			<Card id="main-body" :class="toggelMenuFlag ? 'left-90-px': 'left-180-px'" dis-hover>
+				<div id="breadcrumb">
+					<Breadcrumb>
+						<BreadcrumbItem v-for="(item, index) in urlPaths" :key="index">
+							{{ $t('router.' + item) }}
+						</BreadcrumbItem>
+					</Breadcrumb>
+				</div>
+				<Card :bordered="false" dis-hover>
+					<transition :name="transitionName">
+						<router-view></router-view>
+					</transition>
+				</Card>
 			</Card>
-			<foot></foot>
+			<foot :class="toggelMenuFlag ? 'left-90-px': 'left-180-px'"></foot>
 			<BackTop :bottom="60"></BackTop>
 		</template>
 		<template v-else>
@@ -29,6 +41,9 @@ export default {
 	store,
 	data() {
 		return {
+			toggelMenuFlag: false,
+			urlPaths: [],
+			transitionName: 'slide-right',
 		}
 	},
 
@@ -37,6 +52,10 @@ export default {
 			setScreenWidth: 'setScreenWidth',
 			setIsLogin: 'setIsLogin',
 		}),
+
+		toggelMenu: function (value) {
+			this.toggelMenuFlag = value
+		},
 	},
 
 	computed: mapGetters({
@@ -45,6 +64,14 @@ export default {
 		isLogin: 'getIsLogin'
 	}),
 
+	// 挂载前
+	beforeMount: function () {
+		// 挂载到全局window对象上
+		window.$Message = this.$Message
+		window.$Loading = this.$Loading
+	},
+
+	// 挂载后
 	mounted: function() {
 		this.setScreenWidth(document.body.clientWidth)
 		window.onresize = () => {
@@ -54,6 +81,23 @@ export default {
 		}
 
 		this.setIsLogin()
+		if (!this.utils.isEmpty(this.$route.path.substring(1))) {
+			this.urlPaths = this.$route.path.substring(1).split('/')
+		}
+	},
+
+	watch: {
+		'$route' (to, from) {
+			// 切割地址，用于面包屑导航
+			if (!this.utils.isEmpty(to.path.substring(1))) {
+				this.urlPaths = to.path.substring(1).split('/')
+			}
+
+			// 切换路由效果
+			// const toDepth = to.path.split('/').length
+			// const fromDepth = from.path.split('/').length
+			// this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
+		}
 	}
 }
 </script>
@@ -66,27 +110,38 @@ export default {
 	#leftNav {
 		float: left;
 		position: fixed;
-		z-index: 100;
+		z-index: 1;
 		height: 100%;
+	}
+
+	#breadcrumb {
+		padding: 10px 0px;
 	}
 
 	#main-body {
 		position: absolute;
 		top: 50px;
-		left: 180px;
 		right: 0px;
 		min-height: 90%;
-		background: #eee;
-		padding: 10px 10px;
-		padding-right: 0;
-		margin-bottom: 4%;
+		background: #f5f7f9;
+		padding: 10px 15px;
+		padding-bottom: 0;
+		margin-bottom: 5%;
+		border: 0;
 	}
 
 	#foot {
+		float: left;
 		position: fixed;
 		right: 0px;
 		bottom: 0px;
-		left: 181px;
 		height: 5%;
+	}
+
+	.left-90-px {
+		left: 90px;
+	}
+	.left-180-px {
+		left: 180px;
 	}
 </style>

@@ -27,7 +27,6 @@
 <script>
 	import Velocity from 'velocity-animate'
 	import { audio_visualizer, canvas_draw } from '@/utils/utils'
-	import staticResource from '@/utils/staticResource'
 	import { mapGetters, mapActions } from 'vuex'
 
 	export default {
@@ -40,6 +39,10 @@
 		},
 
 		methods: {
+			...mapActions({
+				setMusicList: 'setMusicList',
+			}),
+
 			pre: function () {
 				if (this.playIndex == 0) {
 					this.audio.play(this.musicList[this.musicList.length - 1])
@@ -68,16 +71,11 @@
 			musicList: 'getMusicList',
 		}),
 
+		beforeMount: function () {
+			this.setMusicList()	// 获取播放列表
+		},
+
 		mounted: function() {
-			this.audio.init()
-			if (this.musicList.length <= 0) return console.log($t('nusuc.empty_list'))
-			this.audio.play(this.musicList[0])
-			this.audio.setLrc(staticResource.lrc)
-			this.canvas = new this.canvas_draw({
-				element: document.getElementById("canvas-music"),
-			})
-			this.canvas.init()
-			this.audio.setCanvasObj(this.canvas)
 			
 		},
 
@@ -90,6 +88,18 @@
 		},
 
 		watch: {
+			musicList: {
+				handler (curVal,oldVal) {
+					this.audio.init()
+					if (this.musicList.length <= 0) return console.log($t('music.empty_list'))
+					this.audio.play(this.musicList[0])
+					this.canvas = new this.canvas_draw({
+						element: document.getElementById("canvas-music"),
+					})
+					this.canvas.init()
+					this.audio.setCanvasObj(this.canvas)
+				},
+			},
 			audio: {
 				handler (curVal,oldVal) {
 					// 结束判断
@@ -112,7 +122,7 @@
 	.music-car {
 		text-align: center;
 		margin-top: 10px;
-		width: 140px;
+		width: 200px;
 
 		&-infor {
 			display: inline-block;
