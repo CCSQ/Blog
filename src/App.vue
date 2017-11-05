@@ -34,6 +34,8 @@ import Foot from '@/components/app/Foot'
 import Login from '@/components/app/Login'
 import store from '@/vuex/store'
 import { mapGetters, mapActions } from 'vuex'
+import Vue from 'vue'
+
 
 export default {
 	name: 'app',
@@ -69,6 +71,7 @@ export default {
 		// 挂载到全局window对象上
 		window.$Message = this.$Message
 		window.$Loading = this.$Loading
+		
 	},
 
 	// 挂载后
@@ -122,7 +125,7 @@ export default {
 		position: absolute;
 		top: 50px;
 		right: 0px;
-		min-height: 90%;
+		min-height: 85%;
 		background: #f5f7f9;
 		padding: 10px 15px;
 		padding-bottom: 0;

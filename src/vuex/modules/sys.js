@@ -8,10 +8,7 @@ import * as types from '../mutation-types'
 const state = {
 	navList: [],	// 导航列表
 	screenWidth: 768,	// 宽度
-	musicList: [
-		{id:1,url:'http://localhost:8088/static/media/demo.65b341f.mp3',name:'demo'},
-		{id:1,url:'http://localhost:8088/static/media/demo.65b341f.mp3',name:'demo'},
-	],
+	musicList: [],
 
 }
 

@@ -73,7 +73,7 @@
 				this.isRemember = true
 			}
 
-			var temp = publicServices.getParticlesSet().then((res) => {
+			publicServices.getParticlesSet().then((res) => {
 				particlesJS('particles', res.body)
 			})
 		},

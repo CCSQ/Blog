@@ -15,7 +15,7 @@
 					theme: 'snow',
 
 					// 自定义
-					preview: 'right',	// 预览，right、bottom
+					preview: 'bottom',	// 预览，right、bottom
 
 					// 模块加载
 					modules: {
@@ -30,7 +30,7 @@
 
 				toolbar: [
 					// ['bold', 'italic', 'underline', 'strike'],
-					// ['blockquote', 'code-block']
+					['blockquote', 'code-block'],
 					// [{ 'header': 1 }, { 'header': 2 }, ],
 					// [{ 'list': 'ordered'}, { 'list': 'bullet' }],
 					// [{ 'script': 'sub'}, { 'script': 'super' }],
@@ -44,13 +44,12 @@
 					// ],
 					// [{ 'font': ['selected','serif','monospace',] }],
 					// [{ 'align': ['center','right','justify',] }],
-					// ['clean','link'] 
-					[{'image': 'upload'}],
-					[{'video': 'http://localhost:3000/uploadVideo'}],
-					// ['video']
+					// ['clean','link'],
+					// [{'image': 'upload'}],
+					// [{'video': 'http://localhost:3000/uploadVideo'}],
 				],
 
-				content: '',
+				content: '<pre class="ql-syntax" spellcheck="false">1\n1\n1\n1\n1\n1\n11\n</pre>',
 
 
 

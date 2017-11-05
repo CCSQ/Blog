@@ -4,8 +4,10 @@ var path = require('path')
 module.exports = {
   build: {
     env: require('./prod.env'),
-    index: path.resolve(__dirname, '/Users/cc/eclipse-workspace/blog-web/src/main/webapp/index.html'),
-    assetsRoot: path.resolve(__dirname, '/Users/cc/eclipse-workspace/blog-web/src/main/webapp'),
+    index: path.resolve(__dirname, '../dist/index.html'),
+    // index: path.resolve(__dirname, '/Users/cc/eclipse-workspace/blog-web/src/main/webapp/index.html'),
+    assetsRoot: path.resolve(__dirname, '../dist/'),
+    // assetsRoot: path.resolve(__dirname, '/Users/cc/eclipse-workspace/blog-web/src/main/webapp'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     productionSourceMap: true,

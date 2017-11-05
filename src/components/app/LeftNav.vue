@@ -158,7 +158,8 @@
 				to.forEach((item) => {
 					if (!this.utils.isEmpty(item.child)) {
 						item.child.forEach((childItem) => {
-							routers.push({ path: item.url + childItem.url, name: childItem.id, component: (resolve) => require(['@/components/' + childItem.component], resolve), })
+							routers.push({ path: item.url + childItem.url, name: childItem.id, component: (resolve) => require(['@/components/' + childItem.component], resolve), })	// 懒加载
+
 						})
 					}
 				})

@@ -69,6 +69,14 @@ html,body {
 	&-body {
 		padding: 0px;
 	}
+
+	// 头部
+	&-head {
+		padding: 5px 16px;
+		p {
+			font-size: 10px;
+		}
+	}
 }
 
 // 输入表单
@@ -181,6 +189,25 @@ html,body {
 	margin-left: 180px;
 }
 
+/* 设置滚动条的样式 */
+::-webkit-scrollbar {
+	width: 5px;
+}
+/* 滚动槽 */
+::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset006pxrgba(0,0,0,0.3);
+	border-radius: 5px;
+}
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+	border-radius: 5px;
+	background: rgba(0,0,0,0.1);
+	-webkit-box-shadow: inset006pxrgba(0,0,0,0.5);
+}
+::-webkit-scrollbar-thumb:window-inactive {
+	// background: rgba(255,0,0,0.4);
+}
+
 // #####################################################################################################
 
 
@@ -282,8 +309,14 @@ html,body {
 	margin: 0px 4px;
 }
 
+// 页面主体
+.page-body {
+	padding: 15px;
+}
+
+// form表单项
 .form-array-item {
-	margin: 10px;
+	margin-top: 10px;
 	padding-right: 20px;
 	padding-top: 10px;
 	border: 1px solid @inline-color;
@@ -318,5 +351,10 @@ html,body {
 
 .light {
 	background-color: #393a3c8a;
+}
+
+.padding-div {
+	padding: 0px 20px;
+	padding-top: 10px;
 }
 // ###############################################################################################################

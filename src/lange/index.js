@@ -107,7 +107,11 @@ export default {
 				modes_grab: '抓取临近的',
 				modes_bubble: '泡沫球效果',
 				modes_repulse: '击退效果',
-			}
+			},
+			sys: {
+				personalizedSettings: '个性化设置',
+				lang: '语言',
+			},
 		},
 		router: {
 			set: '设置',
@@ -118,7 +122,13 @@ export default {
 	'en-US': {
 		form: {
 			account: 'account',
-		}
+		},
+		sets: {
+			sys: {
+				personalizedSettings: 'Personalized Settings',
+				lang: 'lang'
+			}
+		},
 	}
 }
 

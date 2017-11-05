@@ -5,6 +5,7 @@ import hljs from 'highlight.js'
 const hljsDirective = Vue.directive('hljs', el => {
 	let blocks = el.querySelectorAll('pre')
 	blocks.forEach((item) => {
+		let codeType = item.getAttribute('data-code-type')	// 类型
 		let lines = item.innerHTML.split(/\n/).slice(0, -1)
 		let html = lines.map((item, index) => {
 			return '<li><span class="line-num" data-line="' + (index + 1) + '"></span>' + item + '</li>'
@@ -71,10 +72,9 @@ const hljsDirective = Vue.directive('hljs', el => {
 				}
 			}
 		})
-
 		// TODO 类型判断
 		let classes = item.className.split(' ')
-		let type = classes[classes.length - 1]
+		let type = codeType ? codeType : classes[classes.length - 1]
 		if (type !== 'hljs' && lines.length > 2) {
 			item.innerHTML = '<div><b class="copy-text">copy</b><b class="code-type">' + type + '</b></div>' + item.innerHTML
 			let copy = item.querySelector('.copy-text')

@@ -1,117 +1,112 @@
-/**
- * @author IWANABETHATGUY
- * 
- */
+// 代码编辑器类型选择
 
 export class CodeSelector {
-	constructor(quill, options) {
-		this.quill = quill;
-		this.options = options;
-		this.container = quill.options.container;
-		this.codeBlockList = this.container.getElementsByClassName('ql-syntax');
-		this.codeSelectList = [];
-		this.languages = this.quill.options.codetypelist || ['asp', 'javascript', 'html', 'css', 'scss', 'sass', 'less', 'python', 'cpp', 'java'].sort();
-		this.quill.on('text-change', function(delta, olddelta, source) {
+	constructor(quill, options) {	// 插件运行函数
+		this.quill = quill
+		this.options = options
+		this.container = quill.options.container	// 全文信息
+		this.codeBlockList = this.container.getElementsByClassName('ql-syntax')	// 代码编辑框列表
+		this.codeSelectList = []	// 生成的代码选择框
+		this.languages = this.quill.options.codetypelist || ['javascript','html','javascript','javascript','javascript','javascript','javascript','javascript','javascript','javascript','javascript','javascript','javascript']	// 语言类型
+		this.quill.on('text-change', function(delta, olddelta, source) {	// 监听文本变化
 			for (let d in delta.ops) {
-				if (delta['ops'][d].hasOwnProperty('attributes')) {
-					if (delta['ops'][d]['attributes'].hasOwnProperty('code-block')) {
-						if (delta['ops'][d]['attributes']['code-block']) {
-							this.onAddCodeBlock();
+				if (delta['ops'][d].hasOwnProperty('attributes')) {	// 插入模块
+					if (delta['ops'][d]['attributes'].hasOwnProperty('code-block')) {	// 插入的是代码块
+						if (delta['ops'][d]['attributes']['code-block']) {	// 判断是否为去掉代码框（大代码框分成两个小代码框）
+							this.onAddCodeBlock()
 						} else {
-							this.onAddCodeBlock('inhriet');
+							this.onAddCodeBlock(true)
 						}
 					}
-				} else if (delta['ops'][d].hasOwnProperty('insert')) {
-					if (delta['ops'][d]['insert'] === '\n') {
-						this.ArrangeX();
+				} else if (delta['ops'][d].hasOwnProperty('insert')) {	// 输入
+					if (delta['ops'][d]['insert'] === '\n') {	// 回车事件,调整高度
+						this.ArrangeY()
 					}
-				} else if (delta['ops'][d].hasOwnProperty('delete') && delta['ops'][d]['delete'] === 1) {
-					this.onAddCodeBlock();
+				} else if (delta['ops'][d].hasOwnProperty('delete') && delta['ops'][d]['delete'] === 1) {	// 删除
+					this.onAddCodeBlock()
 				}
 			}
+		}.bind(this))
 
-		}.bind(this));
-		this.handler = debounce(() => {
-			this.ArrangeY();
-		}, 200);
-		this.initEvent();
 	}
-	ArrangeX() {
+
+	onAddCodeBlock(flag) {
+		if (this.codeBlockList.length > this.codeSelectList.length) {
+			for (let i = 0, len = this.codeBlockList.length; i < len; i++) {
+				if (!this.codeSelectList[i] || this.codeBlockList[i].offsetTop !== parseInt(this.codeSelectList[i].style.top, 10)) {	// 选择框不在或者对应的选择框不在（按top属性判断）
+					if (flag) {	// 去掉代码框
+						let item = this.codeBlockList[i],
+							cur = new CodeSelectBlock(item.offsetTop, this.languages, this.codeBlockList[i], this.codeSelectList[i - 1].getElementsByTagName('span')[0].innerHTML)
+						this.codeSelectList.splice(i, 0, cur)
+						this.container.insertBefore(cur, this.codeSelectList[i + 1])
+
+					} else {
+						let item = this.codeBlockList[i],
+							cur = new CodeSelectBlock(item.offsetTop, this.languages, this.codeBlockList[i])
+						this.codeSelectList.splice(i, 0, cur)
+						this.container.appendChild(cur)
+					}
+
+					break
+				}
+			}
+		} else if (this.codeBlockList.length < this.codeSelectList.length) {	// 移除代码框
+			this.onRemoveCodeBlock()
+		}
+
+		this.ArrangeY()
+	}
+
+	onRemoveCodeBlock() {
+		let i = 0
+		while (i < this.codeSelectList.length) {
+			if (!this.codeBlockList[i] || this.codeBlockList[i].offsetTop !== parseInt(this.codeSelectList[i].style.top, 10)) {
+				this.container.removeChild(this.codeSelectList[i])
+				this.codeSelectList.splice(i, 1)
+				break
+			}
+			i++
+		}
+	}
+
+	ArrangeY() {
 		for (let i = 0, len = Math.min(this.codeBlockList.length, this.codeSelectList.length); i < len; i++) {
 			this.codeSelectList[i].style.top = this.codeBlockList[i].offsetTop + 'px';
 		}
 	}
-	ArrangeY() {
-		for (let i = 0, len = Math.min(this.codeBlockList.length, this.codeSelectList.length); i < len; i++) {
-			let width = this.codeBlockList[i].offsetWidth,
-				left = this.codeBlockList[i].offsetLeft;
-			this.codeSelectList[i].style.left = width + left - 129 + 'px';
-		}
-	}
-	onRemoveCodeBlock() {
-		let i = 0;
-		while (i < this.codeSelectList.length) {
-			if (!this.codeBlockList[i] || this.codeBlockList[i].offsetTop !== parseInt(this.codeSelectList[i].style.top, 10)) {
-				this.container.removeChild(this.codeSelectList[i]);
-				this.codeSelectList.splice(i, 1);
-				break;
-			}
-			i++;
-		}
-	}
-	onAddCodeBlock(flag) {
-		if (this.codeBlockList.length > this.codeSelectList.length) {
-			for (let i = 0, len = this.codeBlockList.length; i < len; i++) {
-				if (!this.codeSelectList[i] || this.codeBlockList[i].offsetTop !== parseInt(this.codeSelectList[i].style.top, 10)) {
-					if (flag === 'inhriet') {
-						let item = this.codeBlockList[i],
-							cur = new CodeSelectBlock(item.offsetTop, item.offsetLeft, item.offsetWidth, this.languages, this.codeSelectList[i - 1].getElementsByTagName('input')[0].value);
-						this.codeSelectList.splice(i, 0, cur);
-						this.codeSelectList[i].getElementsByTagName('input')[0].value = this.codeSelectList[i - 1].getElementsByTagName('input')[0].value;
-						this.container.insertBefore(cur, this.codeSelectList[i + 1]);
-
-					} else {
-						let item = this.codeBlockList[i],
-							cur = new CodeSelectBlock(item.offsetTop, item.offsetLeft, item.offsetWidth, this.languages);
-						this.codeSelectList.splice(i, 0, cur);
-						this.container.appendChild(cur);
-					}
-
-					break;
-				}
-			}
-		} else if (this.codeBlockList.length < this.codeSelectList.length) {
-			this.onRemoveCodeBlock();
-		}
-		this.ArrangeX();
-	}
-	initEvent() {
-		window.addEventListener('resize', this.handler);
-	}
 }
+
+// 选择框对象
 class CodeSelectBlock {
-	constructor(top, left, width, languages, inhriet = '') {
-		this.init(top, left, width, languages);
-		this.events = new Event();
-		this.initEvent();
+	constructor(top, languages, selectItem, inhriet) {
+		this.selectItem = selectItem
+		this.init(top, languages)
+		this.events = new Event()	// 初始化事件
+		this.initEvent()
 		if (inhriet) {
-			this.input.value = inhriet;
-			this.events._emit('change-language');
+			this.span.innerHTML = inhriet
+			this.events._emit('change-language')
 		}
-		return this.container;
+
+		return this.container
 	}
-	init(top, left, width, languages) {
-		//init style
+
+	getValue() {
+		return this.span.innerHTML
+	}
+
+	// 初始化函数，下拉框的生成在该位置
+	init(top, languages) {
+		// 主体框
 		this.container = this.itemConstructor('div', {
 			'position': 'absolute',
-			'background-color': '#fff',
+			'background-color': '#393a3c8a',
 			'height': '28px',
 			'width': '130px',
-			'border': '1px solid #ccc',
-			'box-sizing': 'border-box',
-			// 'border-radius': '5px',
-			'opacity': '1'
-		}, 'code-type-container');
+			'border-radius': '5px',
+		})
+
+		// 下拉列表
 		this.list = this.itemConstructor('ul', {
 			'width': '120px',
 			'max-height': '200px',
@@ -121,41 +116,52 @@ class CodeSelectBlock {
 			'margin': '0',
 			'box-sizing': 'border-box',
 			'top': '30px',
-			'overflow-y': 'scroll',
+			'right': '0px',
+			'overflow-y': 'auto',
 			'visibility': 'hidden',
+			'color': '#fff',
+			'background-color': '#393a3c8a',
 			'z-index': 0
-		}, 'code-type-list');
-		this.input = this.itemConstructor('input', {
+		}, 'code-type-list')
+
+		// 显示框
+		this.span = this.itemConstructor('span', {
 			'height': '23px',
 			'outline': 'none',
 			'position': 'absolute',
-			'top': '2.5px',
+			'top': '5px',
 			'left': '0',
 			'width': '100px',
-			'border': 'none',
-		}, 'code-type-input');
+			'color': '#fff',
+			'text-align': 'center',
+		}, 'code-type-input')
+
+		// 选择按钮
 		this.button = this.itemConstructor('button', {
 			'position': 'absolute',
 			'outline': 'none',
 			'box-sizing': 'border-box',
 			'background': 'none',
 			'height': '28px',
-			'top': '-1px',
 			'width': '30px',
-			'right': '-1px',
-			'border': '1px solid #ccc',
-			// 'border-radius': '5px'
-		});
-		this.container.appendChild(this.list);
-		this.container.appendChild(this.input);
-		this.container.appendChild(this.button);
-		//130px is the width of  this container
+			'right': '0px',
+			'border': '0px',
+			'border-left': '1px solid #fff',
+			'color': '#fff',
+			'cursor': 'pointer',
+		})
+
+		this.container.appendChild(this.list)
+		this.container.appendChild(this.span)
+		this.container.appendChild(this.button)
+
 		this.extendStyle(this.container, {
 			top: top + 'px',
-			left: width + left - 129 + 'px'
-		});
-		//initData 
-		this.languages = languages;
+			right: '15px',
+		})
+
+		// 初始化语言列表
+		this.languages = languages
 		for (let i = 0; i < this.languages.length; i++) {
 			this.list.appendChild(this.itemConstructor('li', {
 				'list-style': 'none',
@@ -163,73 +169,52 @@ class CodeSelectBlock {
 				'user-select': 'none',
 				'cursor': 'pointer',
 				'font-size': '13px'
-			}, 'code-type-item', this.languages[i]));
+			}, 'code-type-item', this.languages[i]))
 		}
 	}
+
+	// 创建标签
 	itemConstructor(tagName, style, className = '', innerHTML = '') {
-		let item = document.createElement(tagName);
-		item.className = className;
-		item.innerHTML = innerHTML;
-		this.extendStyle(item, style);
-		return item;
+		let item = document.createElement(tagName)
+		item.className = className
+		item.innerHTML = innerHTML
+		this.extendStyle(item, style)
+		return item
 	}
+
+	// 设置style
 	extendStyle(element, style) {
 		for (let s in style) {
 			element.style[s] = style[s];
 		}
 	}
-	getValue() {
-		return this.input.value;
-	}
-	initEvent() {
-		//input event
-		this.input.addEventListener('blur', () => {
-			this.list.style.visibility = 'hidden';
-		});
 
-		this.input.addEventListener('keyup', (e) => {
-			if (e.keyCode === 13) {
-				let filter_list = Array.prototype.filter.call(this.list.children, (item) => {
-					return item.style.display === 'block';
-				});
-				if (filter_list.length > 0 && filter_list[0].innerText.length > 0) {
-					this.input.value = filter_list[0].innerText;
-					this.list.style.zIndex = 0;
-					this.list.style.visibility = 'hidden';
-				}
-			} else {
-				this.list.style.zIndex = 10;
-				this.list.style.visibility = 'initial';
-				Array.prototype.forEach.call(this.list.children, (item, index) => {
-					if (new RegExp('^' + this.input.value + '.*').test(item.innerText)) {
-						item.style.display = 'block';
-					} else {
-						item.style.display = 'none';
-					}
-				});
-			}
-		});
+	// 增加事件处理
+	initEvent() {
 		this.button.onclick = () => {
 			if (this.list.style.visibility === 'hidden') {
-				this.list.style.zIndex = 10;
-				this.list.style.visibility = 'initial';
+				this.list.style.zIndex = 10
+				this.list.style.visibility = 'initial'
 			} else if (this.list.style.visibility === 'initial') {
-				this.list.style.visibility = 'hidden';
-				this.list.style.zIndex = 0;
+				this.list.style.visibility = 'hidden'
+				this.list.style.zIndex = 0
 			}
-		};
+		}
+
 		Array.prototype.forEach.call(this.list.children, (item) => {
 			item.addEventListener('mousedown', () => {
-				this.input.value = item.innerText;
-				this.events._emit('change-language');
-				this.list.style.visibility = 'hidden';
-				this.list.style.zIndex = 0;
-			});
-		});
-		// custom events
+				this.span.innerHTML = item.innerText
+				this.events._emit('change-language')
+				this.list.style.visibility = 'hidden'
+				this.list.style.zIndex = 0
+			})
+		})
+
 		this.events._on('change-language', () => {
-			this.button.style.background = `url(http://owa0yzg8x.bkt.clouddn.com/${this.getValue()}.svg) no-repeat center center`;
-		});
+			// 图标设置，语言设置
+			let att = this.selectItem.setAttribute('data-code-type', this.getValue())
+// 			this.button.style.background = `url(http://owa0yzg8x.bkt.clouddn.com/${this.getValue()}.svg) no-repeat center center`;
+		})
 	}
 }
 
@@ -251,12 +236,4 @@ class Event {
 			}
 		}
 	}
-}
-
-function debounce(func, interval) {
-	let timer;
-	return () => {
-		clearTimeout(timer);
-		timer = setTimeout(func, interval);
-	};
 }
