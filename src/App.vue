@@ -1,6 +1,6 @@
 <template>
 	<div id="app">
-		<template v-if="!isLogin">
+		<template v-if="isLogin">
 			<left-nav v-on:menuToggel="toggelMenu"></left-nav>
 			<header-nav></header-nav>
 
@@ -13,7 +13,8 @@
 					</Breadcrumb>
 				</div>
 				<Card :bordered="false" dis-hover>
-					<transition :name="transitionName">
+					<!-- <transition :name="transitionName"> -->
+					<transition name="fold">
 						<router-view></router-view>
 					</transition>
 				</Card>
@@ -45,7 +46,6 @@ export default {
 		return {
 			toggelMenuFlag: false,
 			urlPaths: [],
-			transitionName: 'slide-right',
 		}
 	},
 
@@ -146,5 +146,36 @@ export default {
 	}
 	.left-180-px {
 		left: 180px;
+	}
+
+	.fold-enter-active {
+		animation-name: fold-in;
+		animation-duration: .5s;
+	}
+	.fold-leave-active {
+		animation-name: fold-out;
+		animation-duration: .5s;
+	}
+	@keyframes fold-in {
+		0% {
+			transform: translate3d(0, 100%, 0);
+		}
+		50% {
+			transform: translate3d(0, 50%, 0);
+		}
+		100% {
+			transform: translate3d(0, 0, 0);
+		}
+	}
+	@keyframes fold-out {
+		0% {
+			transform: translate3d(0, 0, 0);
+		}
+		50% {
+			transform: translate3d(0, 50%, 0);
+		}
+		100% {
+			transform: translate3d(0, 100%, 0);
+		}
 	}
 </style>

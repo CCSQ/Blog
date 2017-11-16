@@ -38,17 +38,11 @@ export const setMusicList = ({commit}) => {
 
 
 // 从用户模块取
-export const setIsLogin = ({commit}) => {
-	// 从服务端获取
-	commit(types.SET_IS_LOGIN, false)
-}
+export const setIsLogin = ({commit}, flag) => {
+	if (flag) local.saveToSessionStorage('isLogin', flag)
 
-export const setTestIsLogin = ({commit}) => {
+	if (local.isExitSessionStorage('isLogin')) flag = local.getBySessionStorage('isLogin')
+	
 	// 从服务端获取
-	commit(types.SET_IS_LOGIN, true)
-}
-
-export const setTestIsLoginOut = ({commit}) => {
-	// 从服务端获取
-	commit(types.SET_IS_LOGIN, false)
+	commit(types.SET_IS_LOGIN, flag)
 }

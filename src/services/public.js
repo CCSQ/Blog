@@ -1,5 +1,6 @@
 // 公共模块，未登陆也能获取数据
 import api from '@/api'
+import md5 from 'js-md5'
 
 export default {
 
@@ -13,9 +14,9 @@ export default {
 		name = '',
 		password = '',
 	}) => {
-		return api.post('public/login', {
+		return api.post('view/user/login', {
 			userName: name,
-			password: password,
+			password: md5(password),
 		})
 	},
 

@@ -26,7 +26,6 @@
 
 <script>
 	import Velocity from 'velocity-animate'
-	import { audio_visualizer, canvas_draw } from '@/utils/utils'
 	import { mapGetters, mapActions } from 'vuex'
 
 	export default {
@@ -76,7 +75,6 @@
 		},
 
 		mounted: function() {
-			
 		},
 
 		filters: {

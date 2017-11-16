@@ -1,4 +1,7 @@
 // canvas 画笔相关
+
+import { animationFrame } from './compatible'
+
 export const canvas_draw = function ({
 	element = null,
 	data = [],
@@ -31,11 +34,12 @@ canvas_draw.prototype = {
 		return this.height
 	},
 
-	animationDraw: function () {
-		var draw = () => {
-			console.log(this.data)
-			animationFrame(draw)
+	drawImg: function (img) {
+		let imge = new Image()
+		imge.src = img
+		imge.onload = () => {
+			this.ctx.drawImage(imge, 0, 0)
 		}
-		animationFrame(draw)
 	},
+
 }

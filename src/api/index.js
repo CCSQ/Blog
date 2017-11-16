@@ -20,7 +20,10 @@ Vue.http.interceptors.push((request, next) => {
 	
 	// 请求发送后的逻辑
 	next((response) => {
-		
+		if (response.body.pb) {
+			response.body.pb.pageIndex = Number.parseInt(response.body.pb.pageIndex)
+			response.body.pb.pageSize = Number.parseInt(response.body.pb.pageSize)
+		}
 		// 如果返回401代码，则退出登陆页
 		if (response.status === 401) {
 			// window.location.hash = '#!/login'
@@ -94,6 +97,16 @@ export default {
 	// 通用get方法
 	get: (url, param = {}) => {
 		return Vue.resource(API_ROOT + url).get(param)
+	},
+
+	// 通用delete方法
+	delete: (url, param = {}) => {
+		return Vue.resource(API_ROOT + url).delete(param)
+	},
+
+	// 通用put方法
+	put: (url, param = {}) => {
+		return Vue.http.put(API_ROOT + url, param, { emulateJSON : true})
 	},
 
 	// 图片上传方法

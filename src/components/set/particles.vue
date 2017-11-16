@@ -1,9 +1,8 @@
 <template>
-	<div id="particles">
-		<div class="page-body">
-			<Row>
-				<Col span="6">
-					<div class="particles-control">
+	<div id="particles" class="page-body">
+		<Row>
+			<Col span="6">
+				<div class="particles-control">
 						<Form :model="particles" :label-width="80" v-if="particles">
 
 								<!-- 原子相关 -->
@@ -229,15 +228,14 @@
 									<Button type="ghost" style="margin-left: 8px">{{$t('sys.cancel')}}</Button>
 								</FormItem>
 						</Form>
-					</div>
-				</Col>
-				<Col span="18">
-					<Affix :offset-top="50">
-						<div id="particles"></div>
-					</Affix>
-				</Col>
-			</Row>
-		</div>
+				</div>
+			</Col>
+			<Col span="18">
+				<Affix :offset-top="50">
+					<div id="particles-bg"></div>
+				</Affix>
+			</Col>
+		</Row>
 	</div>
 </template>
 
@@ -292,13 +290,13 @@
 		beforeMount: function () {
 			publicServices.getParticlesSet().then((res) => {
 				this.particles = res.body
-				particlesJS('particles', res.body)
+				particlesJS('particles-bg', res.body)
 			})
 		},
 
 		mounted: function() {
 			publicServices.getParticlesSet().then((res) => {
-				particlesJS('particles', res.body)
+				particlesJS('particles-bg', res.body)
 				this.particles = res.body
 			})
 		},
@@ -312,7 +310,7 @@
 					this.particles.particles.line_linked.opacity = this.particles.particles.line_linked.line_linked_opacity / 100
 					this.particles.interactivity.modes.grab.line_linked.opacity = this.particles.interactivity.modes.grab.line_linked.line_linked_opacity / 100
 					this.particles.particles.move.out_mode = this.particles.particles.move.out_mode_flag ? 'out' : 'bounce'
-					particlesJS('particles', this.particles)
+					particlesJS('particles-bg', this.particles)
 				},
 				deep:true,
 			},

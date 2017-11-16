@@ -12,4 +12,5 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.mp3
+src/assets/img/pal-assets
 

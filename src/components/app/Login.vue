@@ -49,18 +49,23 @@
 		methods: {
 			...mapActions({
 				setTestIsLogin: 'setTestIsLogin',
+				setIsLogin: 'setIsLogin',
 			}),
 
 			login: function (name) {
 				this.$refs[name].validate((valid) => {
 					if (valid) {
 						if (this.isRemember) {
-							local.saveToLocalStorage('user',this.formData)
+							local.saveToLocalStorage('user', { name: this.formData.name })
 						} else {
 							local.deleteByLocalStorage('user')
 						}
-						publicServices.login(this.formData).then()
-						// this.setTestIsLogin()
+						publicServices.login(this.formData).then((res) => {
+							if (res.body.code === 1002) {
+								local.saveToLocalStorage('token', res.body.data.token)	// 登陆成功，保存token
+								this.setIsLogin(true)	// 设置登陆
+							}
+						})
 					}
 				})
 			}

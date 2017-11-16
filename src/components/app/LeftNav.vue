@@ -120,7 +120,7 @@
 				let paths = this.$route.path.split('/')
 				this.navList.forEach((item) => {
 					let index = this.utils.itemInArray('/' + paths[2], item.child, 'url')
-					if (item.url === '/' + paths[1] && index) {
+					if (item.url === '/' + paths[1] && (index === 0 || index)) {
 						this.openNames.push(item.id)
 						this.activeName = item.child[index].id
 					}
@@ -159,7 +159,6 @@
 					if (!this.utils.isEmpty(item.child)) {
 						item.child.forEach((childItem) => {
 							routers.push({ path: item.url + childItem.url, name: childItem.id, component: (resolve) => require(['@/components/' + childItem.component], resolve), })	// 懒加载
-
 						})
 					}
 				})
