@@ -42,7 +42,7 @@ export default {
 
 	// 通过XMLHttpRequest对象获取url信息, 解构赋值，param默认为空
 	getByXMLHttpRequest(
-		url, 
+		url,
 		{
 			param = {},
 			responseType = '',	// 响应类型

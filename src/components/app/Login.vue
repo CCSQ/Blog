@@ -64,6 +64,8 @@
 							if (res.body.code === 1002) {
 								local.saveToLocalStorage('token', res.body.data.token)	// 登陆成功，保存token
 								this.setIsLogin(true)	// 设置登陆
+							} else {
+								this.$Message.error(res.body.msg)
 							}
 						})
 					}

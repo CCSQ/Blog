@@ -6,7 +6,7 @@ export default {
 
 	// 获取登陆背景json数据
 	getParticlesSet: () => {
-		return api.getStaticSources('staticSources/sets/particles.json')
+		return api.getStaticSources('view/staticSources/sets/particles.json')
 	},
 
 	// 登陆接口
