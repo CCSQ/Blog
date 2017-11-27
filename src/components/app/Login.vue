@@ -22,7 +22,8 @@
 
 	import { mapGetters, mapActions } from 'vuex'
 	import particles from 'particles.js'
-	import publicServices from '@/services/public'
+	import userServices from '@/services/sys/user'
+	import staticServices from '@/services/public/static'
 	import local from '@/local/index'
 
 	export default {
@@ -60,7 +61,7 @@
 						} else {
 							local.deleteByLocalStorage('user')
 						}
-						publicServices.login(this.formData).then((res) => {
+						userServices.login(this.formData).then((res) => {
 							if (res.body.code === 1002) {
 								local.saveToLocalStorage('token', res.body.data.token)	// 登陆成功，保存token
 								this.setIsLogin(true)	// 设置登陆
@@ -80,7 +81,7 @@
 				this.isRemember = true
 			}
 
-			publicServices.getParticlesSet().then((res) => {
+			staticServices.getParticlesSet().then((res) => {
 				particlesJS('particles', res.body)
 			})
 		},

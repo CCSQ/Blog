@@ -1,6 +1,6 @@
 <template>
 	<div id="app">
-		<template v-if="!isLogin">
+		<template v-if="isLogin">
 			<left-nav v-on:menuToggel="toggelMenu"></left-nav>
 			<header-nav></header-nav>
 
