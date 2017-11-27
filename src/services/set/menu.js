@@ -7,15 +7,15 @@ export default {
 			param.pageIndex = pd.pageIndex
 			param.pageSize = pd.pageSize
 		}
-		return api.get('after/menu/list', param)
+		return api.get('after/sys/menu/list', param)
 	},
 
 	deletes: (ids) => {
-		return api.delete('after/menu/deletes', { ids: ids })
+		return api.delete('after/sys/menu/deletes', { ids: ids })
 	},
 
 	save: (object) => {
-		return api.put('after/menu/save', object)
+		return api.put('after/sys/menu/save', object)
 	},
 
 }

@@ -3,7 +3,7 @@ import api from '@/api'
 export default {
 
 	getNavList: () => {
-		return api.get('after/menu/getAllRoleMenu',{})
+		return api.get('after/user/userDefaultPermi/getAllRoleMenu',{})
 	},
 
 	getMusicList: () => {

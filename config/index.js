@@ -32,12 +32,12 @@ module.exports = {
 		// 代理请求处理
 		proxyTable: {
 			'/after': {
-				target: 'http://127.0.0.1:8081',
+				target: 'http://127.0.0.1:8080',
 				changeOrigin: true,
 				pathRewrite: { '^/after': '/after', },
 			},
 			'/view': {
-				target: 'http://127.0.0.1:8081',
+				target: 'http://127.0.0.1:8080',
 				changeOrigin: true,
 				pathRewrite: { '^/view': '/view', },
 			}
