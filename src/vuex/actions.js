@@ -4,7 +4,10 @@ import sysServer from '../services/sys'
 import local from '@/local'
 
 // 系统模块
-export const setNavList = ({ commit }) => {
+export const setNavList = ({ commit }, navList) => {
+	// 登陆时获取
+	if (navList) local.saveToSessionStorage('navList', navList)
+
 	// 做客户端缓存
 	if (!local.isExitSessionStorage('navList')) {
 		sysServer.getNavList().then(function (res) {

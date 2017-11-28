@@ -49,8 +49,8 @@
 
 		methods: {
 			...mapActions({
-				setTestIsLogin: 'setTestIsLogin',
 				setIsLogin: 'setIsLogin',
+				setNavList: 'setNavList',
 			}),
 
 			login: function (name) {
@@ -62,9 +62,11 @@
 							local.deleteByLocalStorage('user')
 						}
 						userServices.login(this.formData).then((res) => {
-							if (res.body.code === 1002) {
+							if (res.body.success) {
 								local.saveToLocalStorage('token', res.body.data.token)	// 登陆成功，保存token
-								this.setIsLogin(true)	// 设置登陆
+								local.saveToSessionStorage('user', res.body.data.user)	// 保存部分用户信息
+								this.setNavList(res.body.data.menu)						// 保存菜单信息
+								this.setIsLogin(true)									// 设置状态为登陆
 							} else {
 								this.$Message.error(res.body.msg)
 							}
